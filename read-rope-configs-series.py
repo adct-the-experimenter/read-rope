@@ -137,10 +137,10 @@ if(int_config_input == 3):
 	R_track = 200; #200 ohms
 	
 	#resistances to use
-	R1 = 500; 
-	R2 = 250; 
-	R3 = 125;
-	R4 = 62;
+	R1 = 200; 
+	R2 = 100; 
+	R3 = 50;
+	R4 = 10;
 	
 	rope_length = 1; #meters length of rope
 	
@@ -273,7 +273,17 @@ if(int_config_input == 3):
 		elif(n == 10):
 			output_volt_array[n] = CalcOutputVoltage(output_bend_array_11,rope_array);
 	
-	print("output voltage array:",output_volt_array);
+	print("output voltage Config 1:",output_volt_array[0]);
+	print("output voltage Config 2:",output_volt_array[1]);
+	print("output voltage Config 3:",output_volt_array[2]);
+	print("output voltage Config 4:",output_volt_array[3]);
+	print("output voltage Config 5:",output_volt_array[4]);
+	print("output voltage Config 6:",output_volt_array[5]);
+	print("output voltage Config 7:",output_volt_array[6]);
+	print("output voltage Config 8:",output_volt_array[7]);
+	print("output voltage Config 9:",output_volt_array[8]);
+	print("output voltage Config 10:",output_volt_array[9]);
+	print("output voltage Config 11:",output_volt_array[10]);
 	
 	#Make sub plot to show where there is a bend
 	
@@ -398,10 +408,10 @@ if(int_config_input == 4):
 	R_track = 200; #200 ohms
 	
 	#resistances to use
-	R1 = 200; 
-	R2 = 100; 
-	R3 = 50;
-	R4 = 10;
+	R1 = 200; #resistor at position 0
+	R2 = 100; #resistor at position 1
+	R3 = 50; #resistor at position 2
+	R4 = 10; #resistor at position 3
 	
 	rope_length = 1; #meters length of rope
 	
@@ -409,6 +419,8 @@ if(int_config_input == 4):
 	num_bends_possible = 4; # number of bends that will affect the voltage
 	
 	rope_array =  np.linspace(0, rope_length, num_bends_possible);
+	#1 means that there is a bend.
+	#output_bend_array[x] = 1 means that there is a bend at x position in rope.
 	
 	output_bend_array_1 = np.zeros(len(rope_array));
 	output_bend_array_1[0] = 1;
@@ -534,7 +546,17 @@ if(int_config_input == 4):
 		elif(n == 10):
 			output_volt_array[n] = CalcOutputVoltage(output_bend_array_11,rope_array);
 	
-	print("output voltage array:",output_volt_array);
+	print("output voltage Config 1:",output_volt_array[0]);
+	print("output voltage Config 2:",output_volt_array[1]);
+	print("output voltage Config 3:",output_volt_array[2]);
+	print("output voltage Config 4:",output_volt_array[3]);
+	print("output voltage Config 5:",output_volt_array[4]);
+	print("output voltage Config 6:",output_volt_array[5]);
+	print("output voltage Config 7:",output_volt_array[6]);
+	print("output voltage Config 8:",output_volt_array[7]);
+	print("output voltage Config 9:",output_volt_array[8]);
+	print("output voltage Config 10:",output_volt_array[9]);
+	print("output voltage Config 11:",output_volt_array[10]);
 	
 	#Make sub plot to show where there is a bend
 	

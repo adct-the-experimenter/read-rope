@@ -266,7 +266,17 @@ if(int_config_input == 3):
 		elif(n == 10):
 			output_volt_array[n] = CalcOutputVoltage(output_bend_array_11,rope_array);
 	
-	print("output voltage array:",output_volt_array);
+	print("output voltage Config 1:",output_volt_array[0]);
+	print("output voltage Config 2:",output_volt_array[1]);
+	print("output voltage Config 3:",output_volt_array[2]);
+	print("output voltage Config 4:",output_volt_array[3]);
+	print("output voltage Config 5:",output_volt_array[4]);
+	print("output voltage Config 6:",output_volt_array[5]);
+	print("output voltage Config 7:",output_volt_array[6]);
+	print("output voltage Config 8:",output_volt_array[7]);
+	print("output voltage Config 9:",output_volt_array[8]);
+	print("output voltage Config 10:",output_volt_array[9]);
+	print("output voltage Config 11:",output_volt_array[10]);
 	
 	#Make sub plot to show where there is a bend
 	
