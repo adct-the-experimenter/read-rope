@@ -45,12 +45,6 @@ for each configuration.
 
 Circuit:
 
-VCC
- -
-Rtrack
- -
-Req
- -
-GND
+VCC-Rtrack-Req-GND
  
 Vout = VCC * (Req / (Rtrack + Req))
