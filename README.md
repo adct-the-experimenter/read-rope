@@ -9,7 +9,7 @@ The preferred configuration is the closer the bend is to source voltage at the b
 There is a loose connection of a wire segment in parallel with a resistor which shorts the resistor. 
 If there is a bend in the wire, then the wire segment shorting the resistor is broken which makes the 
 resistor part of the circuit and in series with another resistor connected to voltage source.
-The resistor connected to ground is called Rtrack.
+The resistor connected to the voltage source is called Rtrack.
 
 Multiple other resistors are connected in parallel to a wire segment whoose connection is broken with a bend.
 The sum of these resistors is referred to as Req.
