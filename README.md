@@ -19,8 +19,11 @@ In the read-rope-configs-parallel.py simulation, Req is added in parallel. This 
 The resistor is always connected to the wire and the wire segment shorting the resistor is what is switched.
 Think of the wire segment as being connected to a SPST switch that is normally closed. 
 The physical bend is like opening the connection of the switch with a press.
-	   
-	  
+
+See the diagrams/schematics/figures for read rope. 
+read-rope-diagram-1-bend.png
+read-rope-diagram-4-bends.png
+
 # Applications:
  - Control for disabled 
  - Virtual Reality/ Augmented Reality (e.g. track precise movement of finger bend, arm bend, leg bend)
