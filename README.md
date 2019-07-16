@@ -20,9 +20,15 @@ The resistor is always connected to the wire and the wire segment shorting the r
 Think of the wire segment as being connected to a SPST switch that is normally closed. 
 The physical bend is like opening the connection of the switch with a press.
 
-See the diagrams/schematics/figures for read rope. 
+See the diagrams/schematics/figures/images for read rope. 
+
 read-rope-diagram-1-bend.png
+
 read-rope-diagram-4-bends.png
+
+proof-of-concept-wire-short-resistor.jpg
+
+proof-of-concept-broken-connection-resistance-added.jpg
 
 # Applications:
  - Control for disabled 
