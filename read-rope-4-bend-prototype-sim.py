@@ -11,7 +11,7 @@ print("\nConfiguration 4, Volt divider Multiple Resistors(distance-based) in Ser
 # volt divider
 # ( Req / (R_eq + R_track) ) * Vsource = Vout
 
-R_track = 3e6; #200 ohms
+R_track = 3e6; #resistor connected to Vsource
 
 #resistances to use
 R1 = 3e6; #resistor at position 0
