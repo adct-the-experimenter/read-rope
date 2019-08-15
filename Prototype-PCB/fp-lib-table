@@ -1,0 +1,7 @@
+(fp_lib_table
+  (lib (name "3Meg SMT Resistor")(type KiCad)(uri /home/archman/Circuit-Prototype/read-rope/kicad-footprints/KTR18EZPF3004/footprints.pretty)(options "")(descr ""))
+  (lib (name KSR221GNCLFS-SMT)(type KiCad)(uri /home/archman/Circuit-Prototype/read-rope/kicad-footprints/KSR221GNCLFS-SMT.pretty)(options "")(descr ""))
+  (lib (name "2Meg SMT Resistor")(type KiCad)(uri /home/archman/Circuit-Prototype/read-rope/kicad-footprints/KTR18EZPF2004/footprints.pretty)(options "")(descr ""))
+  (lib (name "1Meg SMT Resistor")(type KiCad)(uri /home/archman/Circuit-Prototype/read-rope/kicad-footprints/KTR18EZPF1004/footprints.pretty)(options "")(descr ""))
+  (lib (name "750k SMT Resistor")(type KiCad)(uri /home/archman/Circuit-Prototype/read-rope/kicad-footprints/KTR18EZPF7503/footprints.pretty)(options "")(descr ""))
+)
