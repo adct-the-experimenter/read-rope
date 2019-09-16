@@ -11,13 +11,15 @@ print("\nConfiguration 4, Volt divider Multiple Resistors(distance-based) in Ser
 # volt divider
 # ( Req / (R_eq + R_track) ) * Vsource = Vout
 
-R_track = 3e6; #resistor connected to Vsource
+R_track = 100e3; #resistor connected to Vsource
 
 #resistances to use
-R1 = 3e6; #resistor at position 0
-R2 = 2e6; #resistor at position 1
-R3 = 1e6; #resistor at position 2
-R4 = 760e3; #resistor at position 3
+R1 = 100e3; #resistor at position 0
+R2 = 50e3; #resistor at position 1
+R3 = 10e3; #resistor at position 2
+R4 = 1e3; #resistor at position 3
+
+R_load = 1e6; #load resistor at output, parallel to Req
 
 rope_length = 1; #meters length of rope
 
@@ -124,8 +126,11 @@ def CalcOutputVoltage(output_bend_array,rope_array):
 					Req = Req + R4;
 				else:
 					Req = R4;
-					
-	vout = (Req / (Req + R_track))*Vsource;
+	if(Req == 0):
+		vout = 0;
+	else:
+		Rp = ( (Req**-1) + (R_load**-1))**-1;				
+		vout = (Rp / (Rp + R_track))*Vsource;
 	return vout;
 	
 for n in range(num_bends_possible*num_bends_possible):
