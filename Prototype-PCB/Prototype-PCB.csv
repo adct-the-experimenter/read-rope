@@ -1,0 +1,6 @@
+"Designator";"Package";"Quantity";"Designation";"Supplier and ref";
+"R1,RTRACK1";"KTR18EZPF3004";2;"3Meg";
+"R2";"KTR18EZPF2004";1;"2Meg";
+"R3";"KTR18EZPF1004";1;"1Meg";
+"R4";"KTR18EZPF7503";1;"750k";
+"SW1,SW2,SW3,SW4";"KSR221GNCLFS-SMT-NCSPST";4;"SW_SPST";

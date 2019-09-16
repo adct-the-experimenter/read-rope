@@ -4,4 +4,5 @@
   (lib (name "2Meg SMT Resistor")(type KiCad)(uri /home/archman/Circuit-Prototype/read-rope/kicad-footprints/KTR18EZPF2004/footprints.pretty)(options "")(descr ""))
   (lib (name "1Meg SMT Resistor")(type KiCad)(uri /home/archman/Circuit-Prototype/read-rope/kicad-footprints/KTR18EZPF1004/footprints.pretty)(options "")(descr ""))
   (lib (name "750k SMT Resistor")(type KiCad)(uri /home/archman/Circuit-Prototype/read-rope/kicad-footprints/KTR18EZPF7503/footprints.pretty)(options "")(descr ""))
+  (lib (name "1 Meg SMT Resisitor Yageo")(type KiCad)(uri /home/archman/Circuit-Prototype/kicad-resources/RC0100FR071ML/footprints.pretty)(options "")(descr ""))
 )
