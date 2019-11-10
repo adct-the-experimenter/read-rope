@@ -13,8 +13,10 @@ The resistor connected to the voltage source is called Rtrack.
 
 Multiple other resistors are connected in parallel to a wire segment whoose connection is broken with a bend.
 The sum of these resistors is referred to as Req.
-In the read-rope-configs-series.py simulation, Req is added in series. This is the best configuration because it gives voltage values very different and far from each other.
-In the read-rope-configs-parallel.py simulation, Req is added in parallel. This is the not a good configuration because it gives voltage values very similar and close to each other.
+
+Having Req be a combination of resistors in series is the best configuration because it gives voltage values very different and far from each other.
+
+Having Req in parallel is the not a good configuration because it gives voltage values very similar and close to each other.
 
 The resistor is always connected to the wire and the wire segment shorting the resistor is what is switched.
 Think of the wire segment as being connected to a SPST switch that is normally closed. 
@@ -39,19 +41,25 @@ proof-of-concept-broken-connection-resistance-added.jpg
 
 # Simulation
 
-python read-rope-configs-series.py
+Run LTSpice and open the file ltspice-sim-with-load.asc.
 
-Choose option 4 for the preferred configuration of read rope.
+Run the simulation of the circuit and click on wire at point where vout label is.
 
-If there is a bend at x position, then the resistor for that position will be added to Req
-and the output voltage is equal to the ratio of Req over sum of Req and Rtrack multiplied by the source voltage VCC.
-For example, bend at 0th position connects 200 ohm resistor to circuit making Req=200 before Rtrack; 
-Req in series with Rtrack gives an output voltage Vout = VCC*(Req / (Req + Rtrack))= VCC*(200 / (200+200)) = 0.5*VCC
+The Req resistor represents the combinations of resistors from output to circuit ground.
 
-Interpreting output.
-Look at the console output for output voltages for each configuration and look at the graphs to see where the bend is happening
-for each configuration.
+## Interpreting Output
 
+To interpret output:
+
+1. Choose a combination for Req from choices of 1k, 3k, 7k, 9k. 
+  - Example: 1k and 3k
+
+2. Sum the resistors of the combination chosen.
+  - Example: 1k + 3k = 4k 
+
+3. Look at the voltage output of vout at the value of the sum of the resistors of combination.
+  - Example: Look at 4k( sum of combination 1k and 3K).
+  
 Circuit:
 
 VCC-Rtrack-Req-GND
