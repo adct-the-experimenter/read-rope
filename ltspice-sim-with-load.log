@@ -2,8 +2,8 @@ Circuit: * Z:\home\archman\Circuit-Prototype\read-rope\ltspice-sim-with-load.asc
 
 Direct Newton iteration for .op point succeeded.
 
-Date: Mon Sep 16 16:20:08 2019
-Total elapsed time: 0.319 seconds.
+Date: Sun Nov 10 11:14:10 2019
+Total elapsed time: 0.353 seconds.
 
 tnom = 27
 temp = 27
