@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 
-import shutil
+import shutil #file reading and writing
 import sys
-import os
+import os #running 
+import re #regular expressions
+
+import matplotlib
 
 circuit_filename = "./read-rope-circuit.cir";
 
@@ -27,13 +30,18 @@ def WriteCircuitFile():
 	#add 5 volt independent voltage source
 	circuit_file.write("vcc 1 0 DC 5 \n");
 	
-	#tell ngspice to save voltage at output
-	circuit_file.write(".save v(2) \n");
+	#write control section for doing analysis
 	
-	#specify the analysis to be done
-	circuit_file.write(".op\n");
+	circuit_file.write(".control\n");
+	circuit_file.write("unset askquit\n");
+	circuit_file.write("op\n");
+	circuit_file.write("print V(2)\n");
+
+	circuit_file.write("echo output test > outresult.data  $ start new file\n");
+	circuit_file.write("wrdata outresult V(2)\n");
 	
-	
+	circuit_file.write("quit\n")
+	circuit_file.write(".endc\n");
 	
 	#end the file
 	circuit_file.write(".end");
@@ -46,17 +54,47 @@ def RunSimulation():
 	command = 'ngspice -b ' + circuit_filename;
 	os.system(command);
 
+
+def ReadOutput(out_val):
+	output_file = open('outresult', 'r');
+	
+	output_string = "";
+	
+	for line in output_file: 
+		output_string = line;
+				
+	output_file.close();
+	
+	print("output string" + output_string);
+	
+	#split the string with regular expression
+	#split string into numbers like 1.00e+2 or 1.00e-2
+	result = re.split(r'(((\d|\d\.))+(e|E)(\+|\-)(\d+))',output_string);
+	
+	print("result: ");
+	print(result[8]);
+	
+	out_val = float(result[8]);
+	print(out_val);
+	
+	
+	
+# Main Program
+
+output = 0;
+
 #1. Python controller file sets up parameters and ngspice circuit file.
 WriteCircuitFile();
 
-#2. Pass parameters to ngspice.
-
-#3. Execute spice simulation to get result.
+#2. Execute spice simulation to get result.
 RunSimulation();
 
-#4. Save result of spice simulation.
+#3. Read output from file and save it in python.
+ReadOutput(output);
 
-#5. Repeat steps 2-4 until finished getting results for every combination of parameters.
 
-#6. Plot all results.
+#4. Repeat steps 1-3 for every combination of parameters.
+
+
+#5. Plot all results.
 

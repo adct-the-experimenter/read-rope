@@ -1,10 +1,15 @@
 Read Rope Circuit Simulation With Resistive Flexible Sensors
-wrdata output.txt v(2) 
 r1 1 2 20k 
 .param valBend1 = 10000
 r2_limit 2 0 10k 
 r2_flex 2 0 10k 
 vcc 1 0 DC 5 
-.save v(2) 
-.op
+.control
+unset askquit
+op
+print V(2)
+echo output test > outresult.data  $ start new file
+wrdata outresult V(2)
+quit
+.endc
 .end
