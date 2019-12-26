@@ -6,23 +6,24 @@ The preferred configuration is the closer the bend is to source voltage at the b
 
 # How It Works:
 
-There is a loose connection of a wire segment in parallel with a resistor which shorts the resistor. 
-If there is a bend in the wire, then the wire segment shorting the resistor is broken which makes the 
-resistor part of the circuit and in series with another resistor connected to voltage source.
-The resistor connected to the voltage source is called Rtrack.
+A resistive flex sensor is in parallel with a limiter resistor.
 
-Multiple other resistors are connected in parallel to a wire segment whoose connection is broken with a bend.
-The sum of these resistors is referred to as Req.
+The resistive flex sensor increases in resistance when bent.
 
-Having Req be a combination of resistors in series is the best configuration because it gives voltage values very different and far from each other.
+The limiter resistor in parallel to the resistive flex sensor scales the increase in resistance.
 
-Having Req in parallel is the not a good configuration because it gives voltage values very similar and close to each other.
+There is a series chain of sections of a parallel combination of a resistive flex sensor and limiter resistor.
+Different values for a limiter resistor in each section makes for several equivalent resistors in series with each other
+that contribute different increases in output voltage when bent depending on the limiter resistor.
 
-The resistor is always connected to the wire and the wire segment shorting the resistor is what is switched.
-Think of the wire segment as being connected to a SPST switch that is normally closed. 
-The physical bend is like opening the connection of the switch with a press.
+If individual limiter resistors resistance value in each section of the chain were set to make 
+the limiter resistor dependent on the distance from the output node,
 
-See the diagrams/schematics/figures/images for read rope. 
+then, the increase in output voltage would depend on the distance of flex resistor from the output node
+thus making output voltage depend on location of the bend of a flex resistor.
+
+See the diagrams/schematics/figures/images for read rope in old_base directory.
+The resistive flex sensor by Spectra Symbol replaces the switch.
 
 read-rope-diagram-1-bend.png
 
@@ -41,11 +42,11 @@ proof-of-concept-broken-connection-resistance-added.jpg
 
 # Simulation
 
-Run LTSpice and open the file ltspice-sim-with-load.asc.
+Have ngspice installed.
 
-Run the simulation of the circuit and click on wire at point where vout label is.
+Run python script read-rope-flex-resistor-circuit-sim.py
 
-The Req resistor represents the combinations of resistors from output to circuit ground.
+` python read-rope-flex-resistor-circuit-sim.py
 
 ## Interpreting Output
 
