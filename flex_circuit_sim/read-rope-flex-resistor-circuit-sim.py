@@ -10,9 +10,6 @@ import matplotlib.pyplot as plt
 #filename of file that contains ngspice circuit
 circuit_filename = "./read-rope-circuit.cir";
 
-#filename of file that contains parameters for ngspice circuit
-param_filename = "./params.inc";
-
 #list containing resistance values to be used for limiter resistors in each section
 #index indicates section, 0th index = first section
 #set manually by person
@@ -32,9 +29,6 @@ def WriteCircuitFile(output_EQR):
 	
 	
 	circuit_file.write("Read Rope Circuit Simulation With Resistive Flexible Sensors\n");
-	
-	#include parameters
-	circuit_file.write(".include " + param_filename + "\n");
 	
 	#add resistor before output
 	circuit_file.write("r1 1 2 20k \n");
