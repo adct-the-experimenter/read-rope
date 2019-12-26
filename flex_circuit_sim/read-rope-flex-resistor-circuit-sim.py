@@ -7,20 +7,26 @@ import re #regular expressions
 
 import matplotlib.pyplot as plt
 
+#filename of file that contains ngspice circuit
 circuit_filename = "./read-rope-circuit.cir";
 
+#filename of file that contains parameters for ngspice circuit
 param_filename = "./params.inc";
 
-def WriteParameters(valBend1):
-	
-	include_param_file = open(param_filename,'w');
-	
-	#add parameter for flex resistor section 1
-	include_param_file.write(".param valBend1 = " + str(valBend1) + "\n");
-	
-	include_param_file.close();
+#list containing resistance values to be used for limiter resistors in each section
+#index indicates section, 0th index = first section
+#set manually by person
+resistor_limiter_val_list = []
 
-def WriteCircuitFile():
+#list of equivalent resistances at output for different combinations of bends
+#set by program automatically
+equivalent_resistances_list = [];
+
+#list of output voltages for different combinations of bends
+#set by program automatically
+output_volt_list = [];
+
+def WriteCircuitFile(output_EQR):
 	#open empty kicad file
 	circuit_file = open(circuit_filename,'w');
 	
@@ -34,8 +40,7 @@ def WriteCircuitFile():
 	circuit_file.write("r1 1 2 20k \n");
 	
 	#add parallel resistor flex section combo after output node, node 2
-	circuit_file.write("r2_limit 2 0 10k \n");
-	circuit_file.write("r2_flex 2 0 valBend1 \n");
+	circuit_file.write("rOutEQ 2 0 " + str(output_EQR) + "\n");
 	
 	#add 5 volt independent voltage source
 	circuit_file.write("vcc 1 0 DC 5 \n");
@@ -89,38 +94,76 @@ def ReadOutput():
 	out_val = output;
 	return out_val;
 	
+def SimulateReadRopeWithFlexSections(num_sections):
 	
+	#set up combinations of bends
+	#since 0 is no bend and 1 means bend, using binary number to represent combinations
+	#example, for 2 flex sections, combinations are 00,01,10,11 = 4 combinations = 2^2
+	
+	num_combinations = 2**num_sections;
+	
+	#assuming flex resistor has 10k ohms when flat, 20k ohms when bent at 90 degrees
+	
+	#set up equivalent resistances list based on combinations of bends
+	#and limiter resistors in each section
+	for i in range(num_combinations):
+		
+		resistance = 0;
+		
+		#print("combination " + str(i));
+		
+		for j in range(num_sections):
+			
+			flex_resistor = 0;
+			
+			#if there is not a bend
+			if( ((i & (1<<j)) >> j) == 0):
+				#print("no bend. 0");
+				flex_resistor = 10e3;
+			#else if there is a bend
+			else:
+				#print("bend. 1");
+				flex_resistor = 20e3;
+			
+			#print("limiter resistor in section " + str(j) +  ": " + str(resistor_limiter_val_list[j]));	
+			resistance = resistance + ( ( (resistor_limiter_val_list[j]**-1) + (flex_resistor)**(-1) )**(-1) );
+		
+		equivalent_resistances_list.append(int(round(resistance)));
+	
+	#for each equivalent resistance at output in list generated
+	for R in equivalent_resistances_list:
+		
+		#write the ngspice circuit file that includes the resistance,
+		WriteCircuitFile(R);
+		
+		#run the simulation
+		RunSimulation();
+		
+		
+		#read the output
+		out = ReadOutput();
+		
+		#store the output in the list of output voltages
+		output_volt_list.append(out);
+		
+		
 	
 # Main Program
 
+resistor_limiter_val_list = [10e3,30e3];
 
-#1. Python controller file sets up parameters and ngspice circuit file.
-valBend1 = 10000;
-WriteParameters(valBend1);
-WriteCircuitFile();
+SimulateReadRopeWithFlexSections(2);
 
-#2. Execute spice simulation to get result.
-RunSimulation();
+print("\nEquivalent Resistances list.\n");
 
-#3. Read output from file and save it in python.
-output1 = ReadOutput();
+print(equivalent_resistances_list);
 
+print("\nOutput Voltages list. \n");
 
-#4. Repeat steps 1-3 for every combination of parameters.
-output2 = 1;
+print(output_volt_list);
 
-valBend1 = 20000;
-WriteParameters(valBend1);
-WriteCircuitFile();
-
-RunSimulation();
-
-output2 = ReadOutput();
-
-
-
-#5. Plot all results.
-plt.scatter([10e3,20e3] , [output1,output2]);
+# Plot all results.
+plt.scatter(equivalent_resistances_list , output_volt_list);
 plt.xlabel('Equivalent Resistance at Output (ohms)');
-plt.ylabel('Output Voltage (V)2');
+plt.ylabel('Output Voltage (V)');
 plt.show();

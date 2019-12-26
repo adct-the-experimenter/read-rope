@@ -1,8 +1,7 @@
 Read Rope Circuit Simulation With Resistive Flexible Sensors
 .include ./params.inc
 r1 1 2 20k 
-r2_limit 2 0 10k 
-r2_flex 2 0 valBend1 
+rOutEQ 2 0 18667
 vcc 1 0 DC 5 
 .control
 unset askquit
