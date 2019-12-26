@@ -46,22 +46,12 @@ Have ngspice installed.
 
 Run python script read-rope-flex-resistor-circuit-sim.py
 
-` python read-rope-flex-resistor-circuit-sim.py
+    python read-rope-flex-resistor-circuit-sim.py
 
 ## Interpreting Output
-
-To interpret output:
-
-1. Choose a combination for Req from choices of 1k, 3k, 7k, 9k. 
-  - Example: 1k and 3k
-
-2. Sum the resistors of the combination chosen.
-  - Example: 1k + 3k = 4k 
-
-3. Look at the voltage output of vout at the value of the sum of the resistors of combination.
-  - Example: Look at 4k( sum of combination 1k and 3K).
   
-Circuit:
+  
+## Circuit
 
 VCC-Rtrack-Req-GND
  
