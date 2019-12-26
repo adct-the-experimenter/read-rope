@@ -37,7 +37,7 @@ proof-of-concept-broken-connection-resistance-added.jpg
  - Control for disabled 
  - Virtual Reality/ Augmented Reality (e.g. track precise movement of finger bend, arm bend, leg bend)
  - Interactive control for video games
- - Interactive control for electronic musical insturments
+ - Interactive control for electronic musical instruments
  - Interactive control for training simulation
 
 # Simulation
@@ -50,6 +50,23 @@ Run python script read-rope-flex-resistor-circuit-sim.py
 
 ## Interpreting Output
   
+1. Look at the Equivalent Resistance at Output vs Combination graph.
+2. Determine the combination of bends you want to see.
+ - 0 = no bend, 1 = bend
+ - combination 1 = 01 = no bend at section 1, bend at section 0
+3. Look up the equivalent resistant value at output for the combination selected in the Equivalent Output Resistance vs Combination graph.
+4. Look at the Output Voltage vs Equivalent Resistance at Output graph.
+5. Look up the output voltage for equivalent resistance in Output Voltage vs Equivalent Resistance at Output graph.
+  
+## Interpreting bend combination from output voltage.
+
+1. Look at the Output Voltage vs Equivalent Resistance at Output graph.
+2. In Output Voltage vs Equivalent Resistance at Output graph, look up the equivalent resistance for output voltage read.
+3. Look at the Equivalent Resistance at Output vs Combination graph.
+4. In Equivalent Resistance at Output vs Combination graph, look up the combination number for the equivalent resistant value at output.
+5. Determine the combination of bends from the combination number.
+	- 0 = no bend, 1 = bend
+	- combination 1 = 01 = no bend at section 1, bend at section 0
   
 ## Circuit
 
