@@ -144,14 +144,18 @@ def SimulateReadRopeWithFlexSections(num_sections):
 	
 # Main Program
 
-num_sections = 2;
+num_sections = 3;
 #set the values for limiter resistors
 #limiter resistors are the resistors that are in parallel with a flex resistor
 #These are used as scale factors to determine how big the change in resistance is from a bend in a section
 #Ideally the limiter resistors increase in value along the rope to make distinct identifiable changes for different bends.
 
 #Required: number of limiter resistors = number of sections
-resistor_limiter_val_list = [10e3,30e3];
+resistor_limiter_val_list = [6e3,12e3,36e3];
+
+#Good combos:
+# 4 sections, [5e3,10e3,30e3,120e3]
+# 3 sections, [6e3,12e3,36e3]
 
 #simulate the read rope combos
 #input of number of sections
