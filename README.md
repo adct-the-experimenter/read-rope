@@ -4,6 +4,8 @@ This is an open-source hardware project for a device that outputs a certain volt
 
 The preferred configuration is the closer the bend is to source voltage at the beginning, the closer the output voltage is to source voltage.
 
+Resistive Flex Sensor used: https://www.adafruit.com/product/1070
+
 # How It Works:
 
 A resistive flex sensor is in parallel with a limiter resistor.
