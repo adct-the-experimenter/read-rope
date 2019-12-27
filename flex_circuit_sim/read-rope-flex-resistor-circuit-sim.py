@@ -23,6 +23,12 @@ equivalent_resistances_list = [];
 #set by program automatically
 output_volt_list = [];
 
+#Values for resistive flex sensor, no bend and full bend
+flex_resistor_no_bend = 25e3; #25k ohms
+
+flex_resistor_full_bend = 100e3; #100k ohms
+
+
 def WriteCircuitFile(output_EQR):
 	#open empty kicad file
 	circuit_file = open(circuit_filename,'w');
@@ -96,7 +102,7 @@ def SimulateReadRopeWithFlexSections(num_sections):
 	
 	num_combinations = 2**num_sections;
 	
-	#assuming flex resistor has 10k ohms when flat, 20k ohms when bent at 90 degrees
+	#assuming flex resistor has 25k ohms when flat, 100k ohms when bent at 90 degrees
 	
 	#set up equivalent resistances list based on combinations of bends
 	#and limiter resistors in each section
@@ -113,11 +119,11 @@ def SimulateReadRopeWithFlexSections(num_sections):
 			#if there is not a bend
 			if( ((i & (1<<j)) >> j) == 0):
 				#print("no bend. 0");
-				flex_resistor = 10e3;
+				flex_resistor = flex_resistor_no_bend;
 			#else if there is a bend
 			else:
 				#print("bend. 1");
-				flex_resistor = 20e3;
+				flex_resistor = flex_resistor_full_bend;
 			
 			#print("limiter resistor in section " + str(j) +  ": " + str(resistor_limiter_val_list[j]));	
 			resistance = resistance + ( ( (resistor_limiter_val_list[j]**-1) + (flex_resistor)**(-1) )**(-1) );
