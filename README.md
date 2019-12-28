@@ -10,30 +10,27 @@ Resistive Flex Sensor used: https://www.adafruit.com/product/1070
 
 A resistive flex sensor is in parallel with a limiter resistor.
 
-The resistive flex sensor increases in resistance when bent.
+The resistive flex sensor increases in resistance when bent, which increases the voltage at the output.
 
-The limiter resistor in parallel to the resistive flex sensor scales the increase in resistance.
+The limiter resistor in parallel to the resistive flex sensor scales the increase in resistance, which also scales the increase in voltage at the output.
 
-There is a series chain of sections of a parallel combination of a resistive flex sensor and limiter resistor.
-Different values for a limiter resistor in each section makes for several equivalent resistors in series with each other
-that contribute different increases in output voltage when bent depending on the limiter resistor.
+
+There is a series chain of flexible sections, each containing a parallel combination of a resistive flex sensor and limiter resistor.
+
+
+Different values for a limiter resistor in each section make for several equivalent resistors in series with each other
+that contribute different increases in output voltage when bent depending on the limiter resistor value.
 
 If individual limiter resistors resistance value in each section of the chain were set to make 
-the limiter resistor dependent on the distance from the output node,
+the limiter resistor value dependent on the distance from the output node,
 
-then, the increase in output voltage would depend on the distance of flex resistor from the output node
-thus making output voltage depend on location of the bend of a flex resistor.
+then, the increase in output voltage would depend on the distance of a flexible section from the output node
+thus making output voltage depend on the location of the bend of a flex resistor due to the limiter resistor's 
+value depending on location of the bend.
 
-See the diagrams/schematics/figures/images for read rope in old_base directory.
-The resistive flex sensor by Spectra Symbol replaces the switch.
+See the diagram/schematic/figure for read rope circuit in read-rope-flex-resistor-diagram.png 
+and the sample results in read-rope-sample-result-4-sections.png.
 
-read-rope-diagram-1-bend.png
-
-read-rope-diagram-4-bends.png
-
-proof-of-concept-wire-short-resistor.jpg
-
-proof-of-concept-broken-connection-resistance-added.jpg
 
 # Applications:
  - Control for disabled 
@@ -44,7 +41,7 @@ proof-of-concept-broken-connection-resistance-added.jpg
 
 # Simulation
 
-Have ngspice installed.
+Have python and ngspice installed.
 
 Run python script read-rope-flex-resistor-circuit-sim.py
 
@@ -68,7 +65,8 @@ Run python script read-rope-flex-resistor-circuit-sim.py
 4. In Equivalent Resistance at Output vs Combination graph, look up the combination number for the equivalent resistant value at output.
 5. Determine the combination of bends from the combination number.
 	- 0 = no bend, 1 = bend
-	- combination 1 = 01 = no bend at section 1, bend at section 0
+	- combination 1 = 001 = no bend at section 2,no bend at section 1, bend at section 0
+	- combinatoin 4 = 100 = bend at section 2, no bend at section 1, no bend at section 0
   
 ## Circuit
 
