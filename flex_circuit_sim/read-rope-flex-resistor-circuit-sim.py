@@ -199,26 +199,25 @@ print(output_volt_list);
 
 # Plot all results.
 
+#plot combination to equivalent resistance
+combo_bend_list = list(range(0,2**num_sections,1));
+
+print(combo_bend_list);
+
 plot1 = plt.figure(1);
+
+plt.scatter( combo_bend_list , equivalent_resistances_list);
+plt.xlabel('Combination Bend. Read as binary. 1 = 01 = no bend at section 1, bend at section 0');
+plt.ylabel('Equivalent Resistance at Output (ohms)');
+plot1.show();
+
+
+plot2 = plt.figure(2);
 
 #plot output voltage to equivalent resistance
 plt.scatter(equivalent_resistances_list , output_volt_list);
 plt.xlabel('Equivalent Resistance at Output (ohms)');
 plt.ylabel('Output Voltage (V)');
-plot1.show();
-
-#plot combination to equivalent resistance
-
-combo_bend_list = list(range(0,2**num_sections,1));
-
-print(combo_bend_list);
-
-plot2 = plt.figure(2);
-
-plt.scatter( combo_bend_list , equivalent_resistances_list);
-plt.xlabel('Combination Bend. Read as binary. 1 = 01 = no bend at section 1, bend at section 0');
-plt.ylabel('Equivalent Resistance at Output (ohms)');
 plot2.show();
 
 plt.show();
-
