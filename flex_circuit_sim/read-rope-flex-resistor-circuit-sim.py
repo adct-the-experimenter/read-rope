@@ -2,7 +2,7 @@
 
 import shutil #file reading and writing
 import sys
-import os #running 
+import os #running ngspice from command line
 import re #regular expressions
 
 import matplotlib.pyplot as plt
@@ -46,6 +46,9 @@ flex_resistor_full_bend = 100e3; #100k ohms
 #value for track resistor that comes is between the power source and output 
 track_resistor = 20e3;
 
+#value for voltage source for powering the circuit
+vcc = 5;
+
 def WriteCircuitFile(output_EQR):
 	#open empty kicad file
 	circuit_file = open(circuit_filename,'w');
@@ -60,7 +63,7 @@ def WriteCircuitFile(output_EQR):
 	circuit_file.write("rOutEQ 2 0 " + str(output_EQR) + "\n");
 	
 	#add 5 volt independent voltage source
-	circuit_file.write("vcc 1 0 DC 5 \n");
+	circuit_file.write("vcc 1 0 DC " +  str(vcc) + "\n");
 	
 	#write control section for doing analysis
 	
@@ -167,23 +170,26 @@ def SimulateReadRopeWithFlexSections(num_sections):
 	
 # Main Program
 
-#set track resistor to be 20k
-track_resistor = 20e3;
+#set vcc, votage source powering circuit to 5 V
+vcc = 5;
+
+#set track resistor to be 56k
+track_resistor = 56e3;
 
 #Set up the equivalent resistor at output, also known as load
 
-num_sections = 3;
+num_sections = 4;
 #set the values for limiter resistors
 #limiter resistors are the resistors that are in parallel with a flex resistor
 #These are used as scale factors to determine how big the change in resistance is from a bend in a section
 #Ideally the limiter resistors increase in value along the rope to make distinct identifiable changes for different bends.
 
 #Required: number of limiter resistors = number of sections
-resistor_limiter_val_list = [10e3,20e3,56e3];
+resistor_limiter_val_list = [10e3,24e3,56e3,120e3];
 
 #Good combos:
-# 4 sections, [5e3,10e3,30e3,120e3]
-# 3 sections, [6e3,12e3,36e3]
+# 4 sections, [10e3,24e3,56e3,120e3], rtrack = 56e3
+# 3 sections, [10e3,24e3,56e3], rtrack = 56e3
 
 #simulate the read rope combos
 #input of number of sections
