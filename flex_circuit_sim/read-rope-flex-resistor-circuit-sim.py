@@ -172,14 +172,14 @@ track_resistor = 20e3;
 
 #Set up the equivalent resistor at output, also known as load
 
-num_sections = 4;
+num_sections = 3;
 #set the values for limiter resistors
 #limiter resistors are the resistors that are in parallel with a flex resistor
 #These are used as scale factors to determine how big the change in resistance is from a bend in a section
 #Ideally the limiter resistors increase in value along the rope to make distinct identifiable changes for different bends.
 
 #Required: number of limiter resistors = number of sections
-resistor_limiter_val_list = [5e3,10e3,30e3,120e3];
+resistor_limiter_val_list = [10e3,20e3,56e3];
 
 #Good combos:
 # 4 sections, [5e3,10e3,30e3,120e3]
@@ -219,5 +219,14 @@ plt.scatter(equivalent_resistances_list , output_volt_list);
 plt.xlabel('Equivalent Resistance at Output (ohms)');
 plt.ylabel('Output Voltage (V)');
 plot2.show();
+
+plot3 = plt.figure(3);
+
+#plot output voltage to combination
+plt.scatter( combo_bend_list , output_volt_list);
+plt.xlabel('Combination Bend. Read as binary. 1 = 01 = no bend at section 1, bend at section 0');
+plt.ylabel('Output Voltage (V)');
+plot3.show();
+
 
 plt.show();
