@@ -7,6 +7,20 @@ import re #regular expressions
 
 import matplotlib.pyplot as plt
 
+
+###########
+# Circuit #
+###########
+
+#	VCC
+#	RTrack
+#			Output Node
+#	Req at output, load
+#	GND
+
+
+
+
 #filename of file that contains ngspice circuit
 circuit_filename = "./read-rope-circuit.cir";
 
@@ -29,6 +43,9 @@ flex_resistor_no_bend = 25e3; #25k ohms
 flex_resistor_full_bend = 100e3; #100k ohms
 
 
+#value for track resistor that comes is between the power source and output 
+track_resistor = 20e3;
+
 def WriteCircuitFile(output_EQR):
 	#open empty kicad file
 	circuit_file = open(circuit_filename,'w');
@@ -37,7 +54,7 @@ def WriteCircuitFile(output_EQR):
 	circuit_file.write("Read Rope Circuit Simulation With Resistive Flexible Sensors\n");
 	
 	#add resistor before output
-	circuit_file.write("r1 1 2 20k \n");
+	circuit_file.write("r1 1 2 " + str(track_resistor) + "\n");
 	
 	#add parallel resistor flex section combo after output node, node 2
 	circuit_file.write("rOutEQ 2 0 " + str(output_EQR) + "\n");
@@ -149,6 +166,11 @@ def SimulateReadRopeWithFlexSections(num_sections):
 		
 	
 # Main Program
+
+#set track resistor to be 20k
+track_resistor = 20e3;
+
+#Set up the equivalent resistor at output, also known as load
 
 num_sections = 4;
 #set the values for limiter resistors
