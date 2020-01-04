@@ -2,7 +2,7 @@
 
 This is an open-source hardware project for a device that outputs a certain voltage depending on where the rope/wire is bent.
 
-The preferred configuration is the closer the bend is to source voltage at the beginning, the closer the output voltage is to source voltage.
+Hackaday project: https://hackaday.io/project/166557-read-rope-electronic-nerve
 
 Resistive Flex Sensor used: https://www.adafruit.com/product/1070
 
