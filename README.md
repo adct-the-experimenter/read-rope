@@ -31,7 +31,7 @@ value depending on location of the bend.
 See the diagram/schematic/figure for read rope circuit in read-rope-flex-resistor-diagram.png 
 and the sample results in read-rope-sample-result-4-sections.png.
 
-![](https://raw.githubusercontent.com/adct-the-experimenter/read-rope/master/read-rope-flex-resistor-diagram.png)
+![](https://raw.githubusercontent.com/adct-the-experimenter/read-rope/master/read-rope-prototype-1p3.png)
 
 
 # Applications:
@@ -70,7 +70,7 @@ Run python script read-rope-flex-resistor-circuit-sim.py
 	- combination 1 = 001 = no bend at section 2,no bend at section 1, bend at section 0
 	- combination 4 = 100 = bend at section 2, no bend at section 1, no bend at section 0
 
-![](https://raw.githubusercontent.com/adct-the-experimenter/read-rope/master/read-rope-sample-result-4-sections.png)
+![](https://raw.githubusercontent.com/adct-the-experimenter/read-rope/master/read-rope-sample-result-3-sections.png)
   
 ## Circuit
 
