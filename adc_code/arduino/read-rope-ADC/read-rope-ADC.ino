@@ -102,16 +102,16 @@ void ReadSerialForStateInput()
         state_machine = STATE_READ;
         break;
       }
-      //send out rotation quaternion y value
+      //switch to null state
       case '#':
       {
         state_machine = STATE_NULL;
         break;
       }
-      //send out rotation quaternion z value
+      //function to send ADC value to serial
       case '$':
       {
-        
+        SendADCValueToSerial();
         break;
       }
       case '%':
@@ -121,6 +121,12 @@ void ReadSerialForStateInput()
       }
     }
   }
+}
+
+void SendADCValueToSerial()
+{
+	uint16_t ADC_value = analogRead(A0);
+	Serial.println(ADC_value);
 }
 
 //function to run to determine which section is bent
