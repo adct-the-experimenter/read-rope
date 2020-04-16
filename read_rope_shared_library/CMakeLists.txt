@@ -9,8 +9,7 @@ add_library(readrope SHARED
 )
 
 #set version number for library
-PROJECT_VERSION = 0.1
-set_target_properties(readrope PROPERTIES VERSION ${PROJECT_VERSION})
+set_target_properties(readrope PROPERTIES VERSION 0.1)
 
 #set SO version to major version of project version i.e. 0 of 0.1
 set_target_properties(readrope PROPERTIES SOVERSION 0)
@@ -22,7 +21,7 @@ set_target_properties(readrope PROPERTIES PUBLIC_HEADER include/readrope.h)
 include(GNUInstallDirs)
 
 #add rule to expand @ macros
-configure_file(mylib.pc.in mylib.pc @ONLY)
+configure_file(readrope.pc.in readrope.pc @ONLY)
 
 #include src and include directory
 target_include_directories(readrope PRIVATE include)
