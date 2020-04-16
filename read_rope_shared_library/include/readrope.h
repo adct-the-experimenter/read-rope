@@ -1,6 +1,9 @@
 
 #include "SimpleSerial.h" //for getting serial data
 
+#include <cstdint>
+#include <iostream>
+
 uint16_t LIMIT_ZERO = 0;
 uint16_t LIMIT_ONE = 0;
 uint16_t LIMIT_TWO = 0;
@@ -28,7 +31,7 @@ enum class Bend : uint8_t {ERROR_BEND = 0, NO_BEND, BEND_S0, BEND_S1, BEND_S0_S1
 uint8_t state_machine = STATE_NULL;
 
 //serial device communicator
-SimpleSerial m_serial_dev_ptr;
+SimpleSerial* m_serial_dev_ptr;
 
 
 /*

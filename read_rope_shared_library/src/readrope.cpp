@@ -34,7 +34,7 @@ void InitSerialCommunication(std::string port,unsigned int baud_rate)
 uint16_t GetADCValueOfReadRope()
 {
 	//send command to send ADC value to serial
-	m_serial_ptr->writeString("$"); 
+	m_serial_dev_ptr->writeString("$"); 
 	
 	//read number
 	std::string serial_data = m_serial_dev_ptr->readLine(); 
@@ -44,7 +44,7 @@ uint16_t GetADCValueOfReadRope()
 	return adc_value;
 }
 
-Bend GetBendLocationFromReadRopeDevice();
+Bend GetBendLocationFromReadRopeDevice()
 {
 	//if calibrated
   if(LIMIT_ZERO != 0 || LIMIT_ONE != 0 || LIMIT_TWO != 0 || LIMIT_THREE != 0 || LIMIT_FOUR != 0 
@@ -53,9 +53,6 @@ Bend GetBendLocationFromReadRopeDevice();
     // Read the analog value from pin A0
     uint16_t ADC_value = GetADCValueOfReadRope();
     
-    // print the value at serial monitor
-    Serial.println(ADC_value);
-  
     if(ADC_value >= LIMIT_ZERO && ADC_value < LIMIT_ONE)
     {
 		//no bend
