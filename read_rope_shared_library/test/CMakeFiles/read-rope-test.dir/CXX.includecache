@@ -1,0 +1,12 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/pab/Inventions/read-rope/read_rope_shared_library/test/test.cpp
+readrope.h
+/home/pab/Inventions/read-rope/read_rope_shared_library/test/readrope.h
+
