@@ -1,1 +1,0 @@
-/usr/bin/c++    -rdynamic CMakeFiles/read-rope-test.dir/test.cpp.o  -o read-rope-test   -L/usr/local/lib  -Wl,-rpath,/usr/local/lib -lreadrope /usr/lib64/libboost_date_time.so.1.72.0 /usr/lib64/libboost_system.so.1.72.0 -lpthread 

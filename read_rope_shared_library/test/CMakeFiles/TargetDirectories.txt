@@ -1,3 +1,0 @@
-/home/pab/Inventions/read-rope/read_rope_shared_library/test/CMakeFiles/rebuild_cache.dir
-/home/pab/Inventions/read-rope/read_rope_shared_library/test/CMakeFiles/read-rope-test.dir
-/home/pab/Inventions/read-rope/read_rope_shared_library/test/CMakeFiles/edit_cache.dir
