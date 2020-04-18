@@ -9,6 +9,11 @@
 
  Arduino Uno has 10-bit ADC taking in values from 0V - 5V, 4.9mV per unit
  https://www.arduino.cc/reference/en/language/functions/analog-io/analogread/
+
+ Pins Used:
+ 5V, GND, A0
+
+ Set Serial Monitor to 9600 baud rate.
  
  Combination | Bends  |  Expected Output Voltage  |  ADC value
 
@@ -66,7 +71,7 @@ void loop()
     {
       if(!instruction_displayed)
       {
-         Serial.println("Send char.\n !) Start Calibration\n @) Read bends\n #) Standby mode\n");
+         Serial.println("Send char.\n !) Start Calibration\n @) Read bends\n #) Standby mode\n $) ADC value");
          instruction_displayed = true;
       }
       break;
