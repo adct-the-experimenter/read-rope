@@ -219,7 +219,7 @@ void CalibrateSectionZero()
     {
       maxFound = true;
     }
-    else if(ADC == LIMIT_ONE)
+    else if(ADC_value == LIMIT_ONE)
     {
       LIMIT_ONE = 0;
     }
@@ -253,7 +253,7 @@ void CalibrateSectionOne()
     {
       maxFound = true;
     }
-    else if(ADC == LIMIT_TWO)
+    else if(ADC_value == LIMIT_TWO)
     {
       LIMIT_TWO = 0;
     }
@@ -287,7 +287,7 @@ void CalibrateSectionTwo()
     {
       maxFound = true;
     }
-    else if(ADC == LIMIT_FOUR)
+    else if(ADC_value == LIMIT_FOUR)
     {
       LIMIT_FOUR = 0;
     }
