@@ -115,21 +115,21 @@ Status InitSerialCommunication(std::string port,unsigned int baud_rate);
 
 //function to determine the highest limit for section zero
 //must bend section zero as much as you can
-void CalibrateSectionZeroMaxLimit();
+void CalibrateSectionZeroMaxLimit(double& duration);
 
 //function to set high limit for section zero
 void SetSectionZeroMaxLimit(uint16_t& limit);
 
 //function to determine the highest limit for section one
 //must bend section one as much as you can
-void CalibrateSectionOneMaxLimit();
+void CalibrateSectionOneMaxLimit(double& duration);
 
 //function to set high limit for section one
 void SetSectionOneMaxLimit(uint16_t& limit);
 
 //function to determine the highest limit for section two
 //must bend section two as much as you can
-void CalibrateSectionTwoMaxLimit();
+void CalibrateSectionTwoMaxLimit(double& duration);
 
 //function to set high limit for section two
 void SetSectionTwoMaxLimit(uint16_t& limit);

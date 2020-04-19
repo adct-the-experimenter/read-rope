@@ -222,79 +222,92 @@ ReadRope::Status ReadRope::InitSerialCommunication(std::string port,unsigned int
 	return ReadRope::Status::SUCCESS;
 }
 
+#include <time.h>
 
-void ReadRope::CalibrateSectionZeroMaxLimit()
+static bool hasTimeLimitPassed(time_t& start, double& duration)
 {
+	double seconds_since_start = difftime( time(0), start);
 
-  bool maxFound = false;
-  int count = 0;
+	if(seconds_since_start > duration){return true;}
+	
+	return false;
+}
+
+void ReadRope::CalibrateSectionZeroMaxLimit(double& duration)
+{
+	bool stopCalibration = false;
   
-  while(!maxFound)
-  {
-    // Read the analog value from pin A0
-    uint16_t ADC_value = ReadRope::GetADCValueOfReadRope();
-    
-    if(ADC_value > LIMIT_ONE && ADC_value > LIMIT_ZERO)
-    {
-		ReadRope::SetSectionZeroMaxLimit(ADC_value);
-		count++;
-    }
-    
-    if(count == 20){maxFound = true;}
-   
-  }
+	//get start time
+	time_t start = time(0);
+
+	while(!stopCalibration)
+	{
+		// Read the analog value from read rope device
+		uint16_t ADC_value = ReadRope::GetADCValueOfReadRope();
+
+		if(ADC_value > LIMIT_ONE && ADC_value > LIMIT_ZERO)
+		{
+			ReadRope::SetSectionZeroMaxLimit(ADC_value);
+		}
+		
+		stopCalibration = hasTimeLimitPassed(start,duration);
+
+	}
   
 }
 
 void ReadRope::SetSectionZeroMaxLimit(uint16_t& limit){LIMIT_ONE = limit;}
 
-void ReadRope::CalibrateSectionOneMaxLimit()
+void ReadRope::CalibrateSectionOneMaxLimit(double& duration)
 {
-  bool maxFound = false;
-  int count = 0;
+	bool stopCalibration = false;
   
-  while(!maxFound)
-  {
-    // Read the analog value from pin A0
-    uint16_t ADC_value = ReadRope::GetADCValueOfReadRope();
-    
-    if(ADC_value > LIMIT_TWO && ADC_value > LIMIT_ONE)
-    {
-		ReadRope::SetSectionOneMaxLimit(ADC_value);
-		count++;
-    }
-    
-    if(count == 20){maxFound = true;}
-  }
+	//get start time
+	time_t start = time(0);
+  
+	while(!stopCalibration)
+	{
+		// Read the analog value from pin A0
+		uint16_t ADC_value = ReadRope::GetADCValueOfReadRope();
+
+		if(ADC_value > LIMIT_TWO && ADC_value > LIMIT_ONE)
+		{
+			ReadRope::SetSectionOneMaxLimit(ADC_value);
+		}
+
+		stopCalibration = hasTimeLimitPassed(start,duration);
+	}
 
 }
 
 void ReadRope::SetSectionOneMaxLimit(uint16_t& limit){LIMIT_TWO = limit;}
 
-void ReadRope::CalibrateSectionTwoMaxLimit()
+void ReadRope::CalibrateSectionTwoMaxLimit(double& duration)
 {
-  bool maxFound = false;
-  int count = 0;
-  
-  while(!maxFound)
-  {
-	// Read the analog value from pin A0
-	uint16_t ADC_value = ReadRope::GetADCValueOfReadRope();
+	bool stopCalibration = false;
 
-	if(ADC_value > LIMIT_FOUR && ADC_value > LIMIT_TWO)
+	//get start time
+	time_t start = time(0);
+
+	while(!stopCalibration)
 	{
-		ReadRope::SetSectionTwoMaxLimit(ADC_value);
-		count++;
+		// Read the analog value from pin A0
+		uint16_t ADC_value = ReadRope::GetADCValueOfReadRope();
+
+		if(ADC_value > LIMIT_FOUR && ADC_value > LIMIT_TWO)
+		{
+			ReadRope::SetSectionTwoMaxLimit(ADC_value);
+		}
+
+		stopCalibration = hasTimeLimitPassed(start,duration);
+
 	}
 
-	if(count == 20){maxFound = true;}
-  }
-
-  //Calculate remaining limits based on current limits set
-  LIMIT_THREE = LIMIT_TWO + (LIMIT_ONE - LIMIT_ZERO);
-  LIMIT_FIVE = LIMIT_FOUR + (LIMIT_ONE - LIMIT_ZERO);
-  LIMIT_SIX = LIMIT_FOUR + (LIMIT_TWO - LIMIT_ZERO);
-  LIMIT_SEVEN = LIMIT_FOUR + (LIMIT_TWO - LIMIT_ZERO) + (LIMIT_ONE - LIMIT_ZERO);
+	//Calculate remaining limits based on current limits set
+	LIMIT_THREE = LIMIT_TWO + (LIMIT_ONE - LIMIT_ZERO);
+	LIMIT_FIVE = LIMIT_FOUR + (LIMIT_ONE - LIMIT_ZERO);
+	LIMIT_SIX = LIMIT_FOUR + (LIMIT_TWO - LIMIT_ZERO);
+	LIMIT_SEVEN = LIMIT_FOUR + (LIMIT_TWO - LIMIT_ZERO) + (LIMIT_ONE - LIMIT_ZERO);
 }
 
 void ReadRope::SetSectionTwoMaxLimit(uint16_t& limit){LIMIT_FOUR = limit;}
