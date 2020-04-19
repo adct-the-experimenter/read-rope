@@ -1,1 +1,0 @@
-/usr/bin/c++ -fPIC   -shared -Wl,-soname,libreadrope.so.0 -o libreadrope.so.0.1 CMakeFiles/readrope.dir/src/readrope.cpp.o 
