@@ -4,6 +4,15 @@
 int main(int argc, char** argv)
 {
 	/*
+	   ************************************************************
+					Initialize read rope system
+	   *************************************************************
+	*/
+	
+	//initialize read rope system
+	ReadRope::InitReadRopeSystem();
+	
+	/*
 	 ************************************************************ 
 	  Initialize  serial communication with the read rope device.
 	 ************************************************************
@@ -49,6 +58,14 @@ int main(int argc, char** argv)
 	*/
 	
 	//To Be Implemented soon
+	
+	
+	/*
+	 ************************************************************
+					Close read rope system
+	 ************************************************************* 
+	*/
+	ReadRope::CloseReadRopeSystem();
 	
 	return 0;
 }

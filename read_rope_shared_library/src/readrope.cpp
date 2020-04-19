@@ -240,7 +240,6 @@ void ReadRope::StartReadingFromReadRope()
 
 
 
-
 uint16_t ReadRope::GetADCValueOfReadRope()
 {
 	//send command to send ADC value to serial
