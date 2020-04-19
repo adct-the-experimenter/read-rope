@@ -28,25 +28,6 @@
  
  */
 
-uint16_t LIMIT_ZERO = 0;
-uint16_t LIMIT_ONE = 0;
-uint16_t LIMIT_TWO = 0;
-uint16_t LIMIT_THREE = 0;
-uint16_t LIMIT_FOUR = 0;
-uint16_t LIMIT_FIVE = 0;
-uint16_t LIMIT_SIX = 0;
-uint16_t LIMIT_SEVEN = 0;
-
-#define STATE_NULL 0
-#define STATE_CALIBRATION_START 1
-#define STATE_CALIBRATION_S0 2
-#define STATE_CALIBRATION_S1 3
-#define STATE_CALIBRATION_S2 4
-#define STATE_READ 5
-
-uint8_t state_machine = STATE_NULL;
-
-bool instruction_displayed = false;
 
 void setup() 
 {
@@ -65,25 +46,7 @@ void loop()
   //read serial input to determine which state to run
   ReadSerialForStateInput();
 
-  switch(state_machine)
-  {
-    case STATE_NULL:
-    {
-      if(!instruction_displayed)
-      {
-         Serial.println("Send char.\n !) Start Calibration\n @) Read bends\n #) Standby mode\n $) ADC value");
-         instruction_displayed = true;
-      }
-      break;
-    }
-    case STATE_CALIBRATION_START:{ StartCalibration(); break;}
-    case STATE_CALIBRATION_S0:{ CalibrateSectionZero(); break;}
-    case STATE_CALIBRATION_S1:{ CalibrateSectionOne(); break;}
-    case STATE_CALIBRATION_S2:{ CalibrateSectionTwo(); break;}
-    case STATE_READ:{ ReadBendValues(); break;}
-  }
-  
-  delay(100);       // delay in between reads for stability
+  delay(500);
 }
 
 void ReadSerialForStateInput()
@@ -95,224 +58,27 @@ void ReadSerialForStateInput()
     
     switch (incomingCharacter) 
     {
-      //switch to calibration mode
-      case '!':
-      {
-        state_machine = STATE_CALIBRATION_START; 
-        break;
-      }
-      //switch to 
-      case '@':
-      {
-        state_machine = STATE_READ;
-        break;
-      }
-      //switch to null state
-      case '#':
-      {
-        state_machine = STATE_NULL;
-        break;
-      }
-      //function to send ADC value to serial
+ 
+      // send ADC value to serial
       case '$':
       {
         SendADCValueToSerial();
         break;
       }
+      //send character Y to serial
       case '%':
       {
-        
+        Serial.println("Y");
         break;
       }
     }
   }
+
+  
 }
 
 void SendADCValueToSerial()
 {
 	uint16_t ADC_value = analogRead(A0);
 	Serial.println(ADC_value);
-}
-
-//function to run to determine which section is bent
-void ReadBendValues()
-{
-  if(LIMIT_ZERO != 0 || LIMIT_ONE != 0 || LIMIT_TWO != 0 || LIMIT_THREE != 0 || LIMIT_FOUR != 0 
-  || LIMIT_FIVE != 0 || LIMIT_SIX != 0 || LIMIT_SEVEN != 0)
-  {
-    // Read the analog value from pin A0
-    uint16_t ADC_value = analogRead(A0);
-    
-    // print the value at serial monitor
-    Serial.println(ADC_value);
-  
-    if(ADC_value >= LIMIT_ZERO && ADC_value < LIMIT_ONE)
-    {
-      Serial.println("\nNo bend.\n");
-    }
-    else if(ADC_value >= LIMIT_ONE && ADC_value < LIMIT_TWO)
-    {
-      Serial.println("\nBend in section 0.\n");
-    }
-    else if(ADC_value >= LIMIT_TWO && ADC_value < LIMIT_THREE)
-    {
-      Serial.println("\nBend in section 1.\n");
-    }
-    else if(ADC_value >= LIMIT_THREE && ADC_value < LIMIT_FOUR)
-    {
-      Serial.println("\nBend in section 0. Bend in section 1.\n");
-    }
-    else if(ADC_value >= LIMIT_FOUR && ADC_value < LIMIT_FIVE)
-    {
-      Serial.println("\nBend in section 2.\n");
-    }
-    else if(ADC_value >= LIMIT_FIVE && ADC_value < LIMIT_SIX)
-    {
-      Serial.println("\nBend in section 0. Bend in section 2.\n");
-    }
-    else if(ADC_value >= LIMIT_SIX && ADC_value < LIMIT_SEVEN)
-    {
-      Serial.println("\nBend in section 1.Bend in section 2.\n");
-    }
-    else if(ADC_value >= LIMIT_SEVEN)
-    {
-      Serial.println("\nBend in all 3 sections.\n");
-    }
-  }
-  else
-  {
-    Serial.println("\nPlease calibrate the device.\n");
-  }
-  
-}
-
-//function to start calibration of read rope device.
-void StartCalibration()
-{
-  Serial.println("\nStarting calibration. Please leave read rope in state with no bends for a few seconds.\n");
-
-  uint16_t count = 0;
-  while(count != 30)
-  {
-    // Read the analog value from pin A0
-    uint16_t ADC_value = analogRead(A0);
-    LIMIT_ZERO = ADC_value;
-    delay(100);
-    count++;
-  }
-
-  Serial.println("\nFinished no bend phase.\n");
-  Serial.println(LIMIT_ZERO);
-
-  //go to next phase of calibration
-  state_machine = STATE_CALIBRATION_S0;
-}
-
-//function to calibrate section zero 
-void CalibrateSectionZero()
-{
-  Serial.println("\nCalibrating section zero. Please bend section zero of the read rope as much as possible, then stop bending it.\n");
-
-  bool maxFound = false;
-  while(!maxFound)
-  {
-    // Read the analog value from pin A0
-    uint16_t ADC_value = analogRead(A0);
-    delay(100);
-    
-    if(ADC_value < LIMIT_ONE && ADC_value > LIMIT_ZERO)
-    {
-      maxFound = true;
-    }
-    else if(ADC_value == LIMIT_ONE)
-    {
-      LIMIT_ONE = 0;
-    }
-    else
-    {
-      LIMIT_ONE = ADC_value;
-    }
-  }
-  
-  Serial.println("\nFinished section 0 phase.\n");
-  Serial.println(LIMIT_ONE);
-
-  delay(2000);
-
-  //go to next phase of calibration
-  state_machine = STATE_CALIBRATION_S1;
-}
-
-void CalibrateSectionOne()
-{
-  Serial.println("\nCalibrating section one. Please bend section one of the read rope as much as possible, then stop bending it.\n");
-
-  bool maxFound = false;
-  while(!maxFound)
-  {
-    // Read the analog value from pin A0
-    uint16_t ADC_value = analogRead(A0);
-    delay(100);
-    
-    if(ADC_value < LIMIT_TWO && ADC_value > LIMIT_ONE)
-    {
-      maxFound = true;
-    }
-    else if(ADC_value == LIMIT_TWO)
-    {
-      LIMIT_TWO = 0;
-    }
-    else
-    {
-      LIMIT_TWO = ADC_value;
-    }
-  }
-  
-  Serial.println("\nFinished section 1 phase.\n");
-  Serial.println(LIMIT_TWO);
-
-  delay(2000);
-
-  //go to next phase of calibration
-  state_machine = STATE_CALIBRATION_S2;
-}
-
-void CalibrateSectionTwo()
-{
-  Serial.println("\nCalibrating section two. Please bend section two of the read rope as much as possible, then stop bending it.\n");
-
-  bool maxFound = false;
-  while(!maxFound)
-  {
-    // Read the analog value from pin A0
-    uint16_t ADC_value = analogRead(A0);
-    delay(100);
-    
-    if(ADC_value < LIMIT_FOUR && ADC_value > LIMIT_TWO)
-    {
-      maxFound = true;
-    }
-    else if(ADC_value == LIMIT_FOUR)
-    {
-      LIMIT_FOUR = 0;
-    }
-    else
-    {
-      LIMIT_FOUR = ADC_value;
-    }
-  }
-  
-  Serial.println("\nFinished section 2 phase.\n");
-  Serial.println(LIMIT_FOUR);
-
-  //Calculate remaining limits based on current limits set
-  LIMIT_THREE = LIMIT_TWO + (LIMIT_ONE - LIMIT_ZERO);
-  LIMIT_FIVE = LIMIT_FOUR + (LIMIT_ONE - LIMIT_ZERO);
-  LIMIT_SIX = LIMIT_FOUR + (LIMIT_TWO - LIMIT_ZERO);
-  LIMIT_SEVEN = LIMIT_FOUR + (LIMIT_TWO - LIMIT_ZERO) + (LIMIT_ONE - LIMIT_ZERO);
-
-  instruction_displayed = false;
-  Serial.println("\nFinished calibration!\n");
-  //go to next phase of calibration
-  state_machine = STATE_NULL;
 }

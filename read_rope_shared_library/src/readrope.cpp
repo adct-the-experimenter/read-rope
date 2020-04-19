@@ -1,23 +1,130 @@
 #include "readrope.h"
 
 
-void StopReadingFromReadRope()
+
+#include <cstdio>
+
+/**
+ * Determination a platform of an operation system
+ * Fully supported supported only GNU GCC/G++, partially on Clang/LLVM
+ */
+
+#if defined(_WIN32)
+    #define PLATFORM_NAME "windows" // Windows
+#elif defined(_WIN64)
+    #define PLATFORM_NAME "windows" // Windows
+#elif defined(__CYGWIN__) && !defined(_WIN32)
+    #define PLATFORM_NAME "windows" // Windows (Cygwin POSIX under Microsoft Window)
+#elif defined(__ANDROID__)
+    #define PLATFORM_NAME "android" // Android (implies Linux, so it must come first)
+#elif defined(__linux__)
+    #define PLATFORM_NAME "linux" // Debian, Ubuntu, Gentoo, Fedora, openSUSE, RedHat, Centos and other
+#elif defined(__unix__) || !defined(__APPLE__) && defined(__MACH__)
+    #include <sys/param.h>
+    #if defined(BSD)
+        #define PLATFORM_NAME "bsd" // FreeBSD, NetBSD, OpenBSD, DragonFly BSD
+    #endif
+#elif defined(__hpux)
+    #define PLATFORM_NAME "hp-ux" // HP-UX
+#elif defined(_AIX)
+    #define PLATFORM_NAME "aix" // IBM AIX
+#elif defined(__APPLE__) && defined(__MACH__) // Apple OSX and iOS (Darwin)
+    #include <TargetConditionals.h>
+    #if TARGET_IPHONE_SIMULATOR == 1
+        #define PLATFORM_NAME "ios" // Apple iOS
+    #elif TARGET_OS_IPHONE == 1
+        #define PLATFORM_NAME "ios" // Apple iOS
+    #elif TARGET_OS_MAC == 1
+        #define PLATFORM_NAME "osx" // Apple OSX
+    #endif
+#elif defined(__sun) && defined(__SVR4)
+    #define PLATFORM_NAME "solaris" // Oracle Solaris, Open Indiana
+#else
+    #define PLATFORM_NAME NULL
+#endif
+
+// Return a name of platform, if determined, otherwise - an empty string
+const char *get_platform_name() 
 {
-	state_machine = STATE_NULL;
+    return (PLATFORM_NAME == NULL) ? "" : PLATFORM_NAME;
 }
 
-void StartCalibrationProcess()
+std::string ReadRope::GetSerialPortOfReadRopeDevice()
 {
-	state_machine = STATE_CALIBRATION_START;
+	std::string platform_str(get_platform_name());
+	
+	//std::cout << "Platform:" << platform_str << std::endl;
+	
+	std::string port = "Null";
+	std::string temp_port;
+	
+	if(platform_str == "linux")
+	{
+		//get available serial ports 
+		//for now just do expected serial port names /dev/ttyACMX X = 0-9
+		
+		for(int i = 0; i < 4; i++)
+		{
+			//bool to indicate if should continue to testing if device is read rope
+			bool continueToIdentification = false;
+			
+			//try connecting to serial port
+			try
+			{
+				temp_port = "/dev/ttyACM" + std::to_string(i);
+				std::cout << "testing port " << temp_port << std::endl;
+				
+				SimpleSerial tempSerialDevice(temp_port,9600);
+				continueToIdentification = true;
+			}
+			catch(boost::system::system_error& e)
+			{
+				std::cout<< "Error: " << e.what() << std::endl;
+				continueToIdentification = false;
+			}
+			
+			//if should test if device is read rope
+			if(continueToIdentification)
+			{
+				std::cout << "sending ID to device on this port... \n"; 
+				
+				SimpleSerial tempSerialDevice(temp_port,9600);
+				
+				//send specific serial character sequence
+				tempSerialDevice.writeString("%");
+				
+				std::cout << "Sent ID.\n";
+				
+				std::string response = tempSerialDevice.readLine();
+				std::cout << "response: " << response << std::endl;
+				
+				//read answer
+				if(response == "Y")
+				{
+					std::cout << "Read rope is in port " << temp_port << std::endl;
+					port = temp_port;
+					//stop for loop
+					break;
+				}
+				else
+				{
+					std::cout << "This is not a read rope device\n";
+				}
+			}
+			
+		}
+		
+	}
+	else if(platform_str == "windows")
+	{
+		//To be implemented
+		//list available serial ports
+	}
+	
+	return port;
 }
 
-void StartReadingFromReadRope()
-{
-	state_machine = STATE_READ;
-}
-
-
-void InitSerialCommunication(std::string port,unsigned int baud_rate)
+void ReadRope::InitSerialCommunication(std::string port,unsigned int baud_rate)
 {
 	try
 	{
@@ -27,11 +134,31 @@ void InitSerialCommunication(std::string port,unsigned int baud_rate)
 	catch(boost::system::system_error& e)
 	{
 		std::cout<< "Error: " << e.what() << std::endl;
+		delete m_serial_dev_ptr;
 		m_serial_dev_ptr = nullptr;
 	}
 }
 
-uint16_t GetADCValueOfReadRope()
+
+void ReadRope::StopReadingFromReadRope()
+{
+	state_machine = STATE_NULL;
+}
+
+void ReadRope::StartCalibrationProcess()
+{
+	state_machine = STATE_CALIBRATION_START;
+}
+
+void ReadRope::StartReadingFromReadRope()
+{
+	state_machine = STATE_READ;
+}
+
+
+
+
+uint16_t ReadRope::GetADCValueOfReadRope()
 {
 	//send command to send ADC value to serial
 	m_serial_dev_ptr->writeString("$"); 
@@ -44,7 +171,7 @@ uint16_t GetADCValueOfReadRope()
 	return adc_value;
 }
 
-Bend GetBendLocationFromReadRopeDevice()
+ReadRope::Bend ReadRope::GetBendLocationFromReadRopeDevice()
 {
 	//if calibrated
   if(LIMIT_ZERO != 0 || LIMIT_ONE != 0 || LIMIT_TWO != 0 || LIMIT_THREE != 0 || LIMIT_FOUR != 0 
@@ -97,7 +224,211 @@ Bend GetBendLocationFromReadRopeDevice()
   else
   {
     std::cout << "\nPlease calibrate the device.\n";
-    return Bend::ERROR_BEND;
+    return Bend::ERROR_BEND_NO_CALIBRATION;
   }
   
 }
+
+
+/*
+ 
+ uint16_t LIMIT_ZERO = 0;
+uint16_t LIMIT_ONE = 0;
+uint16_t LIMIT_TWO = 0;
+uint16_t LIMIT_THREE = 0;
+uint16_t LIMIT_FOUR = 0;
+uint16_t LIMIT_FIVE = 0;
+uint16_t LIMIT_SIX = 0;
+uint16_t LIMIT_SEVEN = 0;
+
+#define STATE_NULL 0
+#define STATE_CALIBRATION_START 1
+#define STATE_CALIBRATION_S0 2
+#define STATE_CALIBRATION_S1 3
+#define STATE_CALIBRATION_S2 4
+#define STATE_READ 5
+
+
+ //function to run to determine which section is bent
+void ReadBendValues()
+{
+  if(LIMIT_ZERO != 0 || LIMIT_ONE != 0 || LIMIT_TWO != 0 || LIMIT_THREE != 0 || LIMIT_FOUR != 0 
+  || LIMIT_FIVE != 0 || LIMIT_SIX != 0 || LIMIT_SEVEN != 0)
+  {
+    // Read the analog value from pin A0
+    uint16_t ADC_value = analogRead(A0);
+    
+    // print the value at serial monitor
+    Serial.println(ADC_value);
+  
+    if(ADC_value >= LIMIT_ZERO && ADC_value < LIMIT_ONE)
+    {
+      Serial.println("\nNo bend.\n");
+    }
+    else if(ADC_value >= LIMIT_ONE && ADC_value < LIMIT_TWO)
+    {
+      Serial.println("\nBend in section 0.\n");
+    }
+    else if(ADC_value >= LIMIT_TWO && ADC_value < LIMIT_THREE)
+    {
+      Serial.println("\nBend in section 1.\n");
+    }
+    else if(ADC_value >= LIMIT_THREE && ADC_value < LIMIT_FOUR)
+    {
+      Serial.println("\nBend in section 0. Bend in section 1.\n");
+    }
+    else if(ADC_value >= LIMIT_FOUR && ADC_value < LIMIT_FIVE)
+    {
+      Serial.println("\nBend in section 2.\n");
+    }
+    else if(ADC_value >= LIMIT_FIVE && ADC_value < LIMIT_SIX)
+    {
+      Serial.println("\nBend in section 0. Bend in section 2.\n");
+    }
+    else if(ADC_value >= LIMIT_SIX && ADC_value < LIMIT_SEVEN)
+    {
+      Serial.println("\nBend in section 1.Bend in section 2.\n");
+    }
+    else if(ADC_value >= LIMIT_SEVEN)
+    {
+      Serial.println("\nBend in all 3 sections.\n");
+    }
+  }
+  else
+  {
+    Serial.println("\nPlease calibrate the device.\n");
+  }
+  
+}
+
+//function to start calibration of read rope device.
+void StartCalibration()
+{
+  Serial.println("\nStarting calibration. Please leave read rope in state with no bends for a few seconds.\n");
+
+  uint16_t count = 0;
+  while(count != 30)
+  {
+    // Read the analog value from pin A0
+    uint16_t ADC_value = analogRead(A0);
+    LIMIT_ZERO = ADC_value;
+    delay(100);
+    count++;
+  }
+
+  Serial.println("\nFinished no bend phase.\n");
+  Serial.println(LIMIT_ZERO);
+
+  //go to next phase of calibration
+  state_machine = STATE_CALIBRATION_S0;
+}
+
+//function to calibrate section zero 
+void CalibrateSectionZero()
+{
+  Serial.println("\nCalibrating section zero. Please bend section zero of the read rope as much as possible, then stop bending it.\n");
+
+  bool maxFound = false;
+  while(!maxFound)
+  {
+    // Read the analog value from pin A0
+    uint16_t ADC_value = analogRead(A0);
+    delay(100);
+    
+    if(ADC_value < LIMIT_ONE && ADC_value > LIMIT_ZERO)
+    {
+      maxFound = true;
+    }
+    else if(ADC_value == LIMIT_ONE)
+    {
+      LIMIT_ONE = 0;
+    }
+    else
+    {
+      LIMIT_ONE = ADC_value;
+    }
+  }
+  
+  Serial.println("\nFinished section 0 phase.\n");
+  Serial.println(LIMIT_ONE);
+
+  delay(2000);
+
+  //go to next phase of calibration
+  state_machine = STATE_CALIBRATION_S1;
+}
+
+void CalibrateSectionOne()
+{
+  Serial.println("\nCalibrating section one. Please bend section one of the read rope as much as possible, then stop bending it.\n");
+
+  bool maxFound = false;
+  while(!maxFound)
+  {
+    // Read the analog value from pin A0
+    uint16_t ADC_value = analogRead(A0);
+    delay(100);
+    
+    if(ADC_value < LIMIT_TWO && ADC_value > LIMIT_ONE)
+    {
+      maxFound = true;
+    }
+    else if(ADC_value == LIMIT_TWO)
+    {
+      LIMIT_TWO = 0;
+    }
+    else
+    {
+      LIMIT_TWO = ADC_value;
+    }
+  }
+  
+  Serial.println("\nFinished section 1 phase.\n");
+  Serial.println(LIMIT_TWO);
+
+  delay(2000);
+
+  //go to next phase of calibration
+  state_machine = STATE_CALIBRATION_S2;
+}
+
+void CalibrateSectionTwo()
+{
+  Serial.println("\nCalibrating section two. Please bend section two of the read rope as much as possible, then stop bending it.\n");
+
+  bool maxFound = false;
+  while(!maxFound)
+  {
+    // Read the analog value from pin A0
+    uint16_t ADC_value = analogRead(A0);
+    delay(100);
+    
+    if(ADC_value < LIMIT_FOUR && ADC_value > LIMIT_TWO)
+    {
+      maxFound = true;
+    }
+    else if(ADC_value == LIMIT_FOUR)
+    {
+      LIMIT_FOUR = 0;
+    }
+    else
+    {
+      LIMIT_FOUR = ADC_value;
+    }
+  }
+  
+  Serial.println("\nFinished section 2 phase.\n");
+  Serial.println(LIMIT_FOUR);
+
+  //Calculate remaining limits based on current limits set
+  LIMIT_THREE = LIMIT_TWO + (LIMIT_ONE - LIMIT_ZERO);
+  LIMIT_FIVE = LIMIT_FOUR + (LIMIT_ONE - LIMIT_ZERO);
+  LIMIT_SIX = LIMIT_FOUR + (LIMIT_TWO - LIMIT_ZERO);
+  LIMIT_SEVEN = LIMIT_FOUR + (LIMIT_TWO - LIMIT_ZERO) + (LIMIT_ONE - LIMIT_ZERO);
+
+  instruction_displayed = false;
+  Serial.println("\nFinished calibration!\n");
+  //go to next phase of calibration
+  state_machine = STATE_NULL;
+}
+ * */

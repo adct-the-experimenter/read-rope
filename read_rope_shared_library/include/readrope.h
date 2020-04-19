@@ -91,8 +91,9 @@ uint16_t LIMIT_SEVEN = 0;
 #define STATE_CALIBRATION_S2 4
 #define STATE_READ 5
 
-
-enum class Bend : uint8_t {ERROR_BEND = 0, NO_BEND, BEND_S0, BEND_S1, BEND_S0_S1, BEND_S2, BEND_S0_S2, BEND_S1_S2, BEND_S0_S1_S2};
+namespace ReadRope{
+	
+	enum class Bend : uint8_t {ERROR_BEND_NO_CALIBRATION = 0, NO_BEND, BEND_S0, BEND_S1, BEND_S0_S1, BEND_S2, BEND_S0_S2, BEND_S1_S2, BEND_S0_S1_S2};
 
 //system refers to the state machine and functions performed by the read rope library. 
 
@@ -111,6 +112,11 @@ SimpleSerial* m_serial_dev_ptr;
  ************* 
 */
 
+//function to get the serial port that read rope device is connected to
+std::string GetSerialPortOfReadRopeDevice();
+
+//function to initialize serial communication with serial device of read rope
+void InitSerialCommunication(std::string port,unsigned int baud_rate);
 
 //function to make the system start reading information coming from the read rope
 void StartReadingFromReadRope();
@@ -125,13 +131,13 @@ void StopReadingFromReadRope();
 void StartCalibrationProcess();
 
 
-//function to initialize serial communication with serial device of read rope
-void InitSerialCommunication(std::string port,unsigned int baud_rate);
-
-
 //function to get the ADC value directly from read rope device through serial communication
 uint16_t GetADCValueOfReadRope();
 
 //function to make the system get the bend location from interpreting
 //information from read rope device
-Bend GetBendLocationFromReadRopeDevice(); 
+Bend GetBendLocationFromReadRopeDevice();
+	
+}
+
+ 
