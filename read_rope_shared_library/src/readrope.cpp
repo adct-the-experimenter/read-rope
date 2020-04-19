@@ -223,21 +223,90 @@ ReadRope::Status ReadRope::InitSerialCommunication(std::string port,unsigned int
 }
 
 
-void ReadRope::StopReadingFromReadRope()
+void ReadRope::CalibrateSectionZeroHighLimit()
 {
-	state_machine = State::STATE_NULL;
+
+  bool maxFound = false;
+  int count = 0;
+  
+  while(!maxFound)
+  {
+    // Read the analog value from pin A0
+    uint16_t ADC_value = ReadRope::GetADCValueOfReadRope();
+    
+    if(ADC_value > LIMIT_ONE && ADC_value > LIMIT_ZERO)
+    {
+		ReadRope::SetSectionZeroHighLimit(ADC_value);
+		count++;
+    }
+    
+    if(count == 20){maxFound = true;}
+   
+  }
+  
 }
 
-void ReadRope::StartCalibrationProcess()
+void ReadRope::SetSectionZeroHighLimit(uint16_t& limit){LIMIT_ONE = limit;}
+
+void ReadRope::CalibrateSectionOneHighLimit()
 {
-	state_machine = State::STATE_CALIBRATION_START;
+  bool maxFound = false;
+  int count = 0;
+  
+  while(!maxFound)
+  {
+    // Read the analog value from pin A0
+    uint16_t ADC_value = ReadRope::GetADCValueOfReadRope();
+    
+    if(ADC_value > LIMIT_TWO && ADC_value > LIMIT_ONE)
+    {
+		ReadRope::SetSectionOneHighLimit(ADC_value);
+		count++;
+    }
+    
+    if(count == 20){maxFound = true;}
+  }
+
 }
 
-void ReadRope::StartReadingFromReadRope()
+void ReadRope::SetSectionOneHighLimit(uint16_t& limit){LIMIT_TWO = limit;}
+
+void ReadRope::CalibrateSectionTwoHighLimit()
 {
-	state_machine = State::STATE_READ;
+  bool maxFound = false;
+  int count = 0;
+  
+  while(!maxFound)
+  {
+	// Read the analog value from pin A0
+	uint16_t ADC_value = ReadRope::GetADCValueOfReadRope();
+
+	if(ADC_value > LIMIT_FOUR && ADC_value > LIMIT_TWO)
+	{
+		ReadRope::SetSectionTwoHighLimit(ADC_value);
+		count++;
+	}
+
+	if(count == 20){maxFound = true;}
+  }
+
+  //Calculate remaining limits based on current limits set
+  LIMIT_THREE = LIMIT_TWO + (LIMIT_ONE - LIMIT_ZERO);
+  LIMIT_FIVE = LIMIT_FOUR + (LIMIT_ONE - LIMIT_ZERO);
+  LIMIT_SIX = LIMIT_FOUR + (LIMIT_TWO - LIMIT_ZERO);
+  LIMIT_SEVEN = LIMIT_FOUR + (LIMIT_TWO - LIMIT_ZERO) + (LIMIT_ONE - LIMIT_ZERO);
 }
 
+void ReadRope::SetSectionTwoHighLimit(uint16_t& limit){LIMIT_FOUR = limit;}
+
+
+void ReadRope::SetSectionZeroOneComboMinLimit(uint16_t& limit){LIMIT_THREE = limit;}
+
+void ReadRope::SetSectionZeroTwoComboMinLimit(uint16_t& limit){LIMIT_FIVE = limit;}
+
+void ReadRope::SetSectionOneTwoComboMinLimit(uint16_t& limit){LIMIT_SIX = limit;}
+
+void ReadRope::SetSectionOneTwoThreeComboMinLimit(uint16_t& limit){LIMIT_SEVEN = limit;}
 
 
 uint16_t ReadRope::GetADCValueOfReadRope()
@@ -303,11 +372,9 @@ ReadRope::Bend ReadRope::GetBendLocationFromReadRopeDevice()
       return Bend::BEND_S0_S1_S2;
     }
   }
-  else
-  {
-    std::cout << "\nPlease calibrate the device.\n";
-    return Bend::ERROR_BEND_NO_CALIBRATION;
-  }
+  
+  std::cout << "\nPlease calibrate the device.\n";
+  return Bend::ERROR_BEND_NO_CALIBRATION;
   
 }
 
@@ -386,23 +453,7 @@ void ReadBendValues()
 //function to start calibration of read rope device.
 void StartCalibration()
 {
-  Serial.println("\nStarting calibration. Please leave read rope in state with no bends for a few seconds.\n");
-
-  uint16_t count = 0;
-  while(count != 30)
-  {
-    // Read the analog value from pin A0
-    uint16_t ADC_value = analogRead(A0);
-    LIMIT_ZERO = ADC_value;
-    delay(100);
-    count++;
-  }
-
-  Serial.println("\nFinished no bend phase.\n");
-  Serial.println(LIMIT_ZERO);
-
-  //go to next phase of calibration
-  state_machine = STATE_CALIBRATION_S0;
+  
 }
 
 //function to calibrate section zero 
@@ -513,4 +564,4 @@ void CalibrateSectionTwo()
   //go to next phase of calibration
   state_machine = STATE_NULL;
 }
- * */
+*/

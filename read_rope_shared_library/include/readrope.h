@@ -103,16 +103,57 @@ std::string GetSerialPortOfReadRopeDevice();
 //function to initialize serial communication with serial device of read rope
 Status InitSerialCommunication(std::string port,unsigned int baud_rate);
 
-//function to make the system start reading information coming from the read rope
-void StartReadingFromReadRope();
 
-//function to make the system to stop reading information coming from read rope
-void StopReadingFromReadRope();
+/* 
+ *********************
+       Calibration
+ ********************* 
+*/
 
+//Can do calibration manually using SetSectionXHighLimit functions
+//or use default methods for calibrating the section
 
-//function to make the system start calibrating the device
-//calibration involves just changing the way the system interprets the information.
-void StartCalibrationProcess();
+//function to determine the highest limit for section zero
+//must bend section zero as much as you can
+void CalibrateSectionZeroHighLimit();
+
+//function to set high limit for section zero
+void SetSectionZeroHighLimit(uint16_t& limit);
+
+//function to determine the highest limit for section one
+//must bend section one as much as you can
+void CalibrateSectionOneHighLimit();
+
+//function to set high limit for section one
+void SetSectionOneHighLimit(uint16_t& limit);
+
+//function to determine the highest limit for section two
+//must bend section two as much as you can
+void CalibrateSectionTwoHighLimit();
+
+//function to set high limit for section two
+void SetSectionTwoHighLimit(uint16_t& limit);
+
+void SetSectionZeroOneComboMinLimit(uint16_t& limit);
+
+void SetSectionZeroTwoComboMinLimit(uint16_t& limit);
+
+void SetSectionOneTwoComboMinLimit(uint16_t& limit);
+
+void SetSectionOneTwoThreeComboMinLimit(uint16_t& limit);
+
+/*
+ LIMIT_ZERO No bend
+ LIMIT_ONE  minimum limit for bend in only section 0
+ LIMIT_TWO  maximum limit for bend in only section 1
+ LIMIT_FOUR maximum limit for bend in only section 2
+ 
+ LIMIT_THREE minimum limit for bends in section 0 and section 1 
+ LIMIT_FIVE minimum limit for bends in section 0 and section 2
+ LIMIT_SIX minimum limit for bends in section 1 and section 2
+ LIMIT_SEVEN minimum limit for bends in all 3 sections.
+
+*/
 
 
 //function to get the ADC value directly from read rope device through serial communication
