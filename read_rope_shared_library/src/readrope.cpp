@@ -223,7 +223,7 @@ ReadRope::Status ReadRope::InitSerialCommunication(std::string port,unsigned int
 }
 
 
-void ReadRope::CalibrateSectionZeroHighLimit()
+void ReadRope::CalibrateSectionZeroMaxLimit()
 {
 
   bool maxFound = false;
@@ -236,7 +236,7 @@ void ReadRope::CalibrateSectionZeroHighLimit()
     
     if(ADC_value > LIMIT_ONE && ADC_value > LIMIT_ZERO)
     {
-		ReadRope::SetSectionZeroHighLimit(ADC_value);
+		ReadRope::SetSectionZeroMaxLimit(ADC_value);
 		count++;
     }
     
@@ -246,9 +246,9 @@ void ReadRope::CalibrateSectionZeroHighLimit()
   
 }
 
-void ReadRope::SetSectionZeroHighLimit(uint16_t& limit){LIMIT_ONE = limit;}
+void ReadRope::SetSectionZeroMaxLimit(uint16_t& limit){LIMIT_ONE = limit;}
 
-void ReadRope::CalibrateSectionOneHighLimit()
+void ReadRope::CalibrateSectionOneMaxLimit()
 {
   bool maxFound = false;
   int count = 0;
@@ -260,7 +260,7 @@ void ReadRope::CalibrateSectionOneHighLimit()
     
     if(ADC_value > LIMIT_TWO && ADC_value > LIMIT_ONE)
     {
-		ReadRope::SetSectionOneHighLimit(ADC_value);
+		ReadRope::SetSectionOneMaxLimit(ADC_value);
 		count++;
     }
     
@@ -269,9 +269,9 @@ void ReadRope::CalibrateSectionOneHighLimit()
 
 }
 
-void ReadRope::SetSectionOneHighLimit(uint16_t& limit){LIMIT_TWO = limit;}
+void ReadRope::SetSectionOneMaxLimit(uint16_t& limit){LIMIT_TWO = limit;}
 
-void ReadRope::CalibrateSectionTwoHighLimit()
+void ReadRope::CalibrateSectionTwoMaxLimit()
 {
   bool maxFound = false;
   int count = 0;
@@ -283,7 +283,7 @@ void ReadRope::CalibrateSectionTwoHighLimit()
 
 	if(ADC_value > LIMIT_FOUR && ADC_value > LIMIT_TWO)
 	{
-		ReadRope::SetSectionTwoHighLimit(ADC_value);
+		ReadRope::SetSectionTwoMaxLimit(ADC_value);
 		count++;
 	}
 
@@ -297,7 +297,7 @@ void ReadRope::CalibrateSectionTwoHighLimit()
   LIMIT_SEVEN = LIMIT_FOUR + (LIMIT_TWO - LIMIT_ZERO) + (LIMIT_ONE - LIMIT_ZERO);
 }
 
-void ReadRope::SetSectionTwoHighLimit(uint16_t& limit){LIMIT_FOUR = limit;}
+void ReadRope::SetSectionTwoMaxLimit(uint16_t& limit){LIMIT_FOUR = limit;}
 
 
 void ReadRope::SetSectionZeroOneComboMinLimit(uint16_t& limit){LIMIT_THREE = limit;}

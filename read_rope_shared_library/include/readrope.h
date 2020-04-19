@@ -110,36 +110,40 @@ Status InitSerialCommunication(std::string port,unsigned int baud_rate);
  ********************* 
 */
 
-//Can do calibration manually using SetSectionXHighLimit functions
+//Can do calibration manually using SetSectionXMaxLimit functions
 //or use default methods for calibrating the section
 
 //function to determine the highest limit for section zero
 //must bend section zero as much as you can
-void CalibrateSectionZeroHighLimit();
+void CalibrateSectionZeroMaxLimit();
 
 //function to set high limit for section zero
-void SetSectionZeroHighLimit(uint16_t& limit);
+void SetSectionZeroMaxLimit(uint16_t& limit);
 
 //function to determine the highest limit for section one
 //must bend section one as much as you can
-void CalibrateSectionOneHighLimit();
+void CalibrateSectionOneMaxLimit();
 
 //function to set high limit for section one
-void SetSectionOneHighLimit(uint16_t& limit);
+void SetSectionOneMaxLimit(uint16_t& limit);
 
 //function to determine the highest limit for section two
 //must bend section two as much as you can
-void CalibrateSectionTwoHighLimit();
+void CalibrateSectionTwoMaxLimit();
 
 //function to set high limit for section two
-void SetSectionTwoHighLimit(uint16_t& limit);
+void SetSectionTwoMaxLimit(uint16_t& limit);
 
+//function to set minimum limit for a bend in both section zero and section one
 void SetSectionZeroOneComboMinLimit(uint16_t& limit);
 
+//function to set minimum limit for a bend in both section zero and section two
 void SetSectionZeroTwoComboMinLimit(uint16_t& limit);
 
+//function to set minimum limit for a bend in both section one and section two
 void SetSectionOneTwoComboMinLimit(uint16_t& limit);
 
+//function to set minimum limit for a bend in all 3 sections
 void SetSectionOneTwoThreeComboMinLimit(uint16_t& limit);
 
 /*
