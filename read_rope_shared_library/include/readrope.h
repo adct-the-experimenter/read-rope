@@ -95,9 +95,10 @@ namespace ReadRope{
 	
 	enum class Bend : uint8_t {ERROR_BEND_NO_CALIBRATION = 0, NO_BEND, BEND_S0, BEND_S1, BEND_S0_S1, BEND_S2, BEND_S0_S2, BEND_S1_S2, BEND_S0_S1_S2};
 
+	enum class Status : uint8_t {ERROR = 0, SUCCESS};
+	
+	
 //system refers to the state machine and functions performed by the read rope library. 
-
-
 
 //state machine of the system
 uint8_t state_machine = STATE_NULL;
@@ -116,14 +117,13 @@ SimpleSerial* m_serial_dev_ptr;
 std::string GetSerialPortOfReadRopeDevice();
 
 //function to initialize serial communication with serial device of read rope
-void InitSerialCommunication(std::string port,unsigned int baud_rate);
+Status InitSerialCommunication(std::string port,unsigned int baud_rate);
 
 //function to make the system start reading information coming from the read rope
 void StartReadingFromReadRope();
 
 //function to make the system to stop reading information coming from read rope
 void StopReadingFromReadRope();
-
 
 
 //function to make the system start calibrating the device

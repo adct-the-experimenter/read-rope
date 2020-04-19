@@ -1,4 +1,5 @@
 //Arduino Code for reading ADC from read rope
+//for esp32
 
 /*
 
@@ -28,6 +29,8 @@
  
  */
 
+//GPIO pin declarations
+#define ANALOG_PIN_0 36 //pin VP in ESP32 Devkit C V4 
 
 void setup() 
 {
@@ -46,7 +49,7 @@ void loop()
   //read serial input to determine which state to run
   ReadSerialForStateInput();
 
-  delay(500);
+  delay(100);
 }
 
 void ReadSerialForStateInput()
@@ -79,6 +82,6 @@ void ReadSerialForStateInput()
 
 void SendADCValueToSerial()
 {
-	uint16_t ADC_value = analogRead(A0);
+	uint16_t ADC_value = analogRead(ANALOG_PIN_0);
 	Serial.println(ADC_value);
 }

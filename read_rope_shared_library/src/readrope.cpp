@@ -58,61 +58,81 @@ std::string ReadRope::GetSerialPortOfReadRopeDevice()
 	std::string port = "Null";
 	std::string temp_port;
 	
+	std::string interface_str = "";
+	
 	if(platform_str == "linux")
 	{
 		//get available serial ports 
-		//for now just do expected serial port names /dev/ttyACMX X = 0-9
+		//for now just do expected serial port names /dev/ttyACMX X = 0-4 and /dev/ttyUSBX
 		
-		for(int i = 0; i < 4; i++)
+		bool stopTrying = false;
+		
+		interface_str = "/dev/ttyACM";
+		
+		while(!stopTrying)
 		{
-			//bool to indicate if should continue to testing if device is read rope
-			bool continueToIdentification = false;
+			int count = 0;
 			
-			//try connecting to serial port
-			try
+			for(int i = 0; i < 4; i++)
 			{
-				temp_port = "/dev/ttyACM" + std::to_string(i);
-				std::cout << "testing port " << temp_port << std::endl;
+				//bool to indicate if should continue to testing if device is read rope
+				bool continueToIdentification = false;
 				
-				SimpleSerial tempSerialDevice(temp_port,9600);
-				continueToIdentification = true;
-			}
-			catch(boost::system::system_error& e)
-			{
-				std::cout<< "Error: " << e.what() << std::endl;
-				continueToIdentification = false;
+				//try connecting to serial port
+				try
+				{
+					temp_port = interface_str + std::to_string(i);
+					std::cout << "testing port " << temp_port << std::endl;
+					
+					SimpleSerial tempSerialDevice(temp_port,9600);
+					continueToIdentification = true;
+				}
+				catch(boost::system::system_error& e)
+				{
+					std::cout<< "Error: " << e.what() << std::endl;
+					continueToIdentification = false;
+				}
+				
+				//if should test if device is read rope
+				if(continueToIdentification)
+				{
+					std::cout << "sending ID to device on this port... \n"; 
+					
+					SimpleSerial tempSerialDevice(temp_port,9600);
+					
+					//send specific serial character sequence
+					tempSerialDevice.writeString("%");
+					
+					std::cout << "Sent ID %.\n";
+					
+					std::string response = tempSerialDevice.readLine();
+					std::cout << "response: " << response << std::endl;
+					
+					//read answer
+					if(response == "Y")
+					{
+						std::cout << "Read rope is in port " << temp_port << std::endl;
+						port = temp_port;
+						//stop for loop
+						break;
+					}
+					else
+					{
+						std::cout << "This is not a read rope device\n";
+					}
+				}
+				
 			}
 			
-			//if should test if device is read rope
-			if(continueToIdentification)
-			{
-				std::cout << "sending ID to device on this port... \n"; 
-				
-				SimpleSerial tempSerialDevice(temp_port,9600);
-				
-				//send specific serial character sequence
-				tempSerialDevice.writeString("%");
-				
-				std::cout << "Sent ID.\n";
-				
-				std::string response = tempSerialDevice.readLine();
-				std::cout << "response: " << response << std::endl;
-				
-				//read answer
-				if(response == "Y")
-				{
-					std::cout << "Read rope is in port " << temp_port << std::endl;
-					port = temp_port;
-					//stop for loop
-					break;
-				}
-				else
-				{
-					std::cout << "This is not a read rope device\n";
-				}
-			}
+			if(port != "Null"){stopTrying = true;}
+			
+			interface_str = "/dev/ttyUSB";
+			count++;
+			
+			if(count == 2){stopTrying = true;}
 			
 		}
+		
 		
 	}
 	else if(platform_str == "windows")
@@ -124,7 +144,7 @@ std::string ReadRope::GetSerialPortOfReadRopeDevice()
 	return port;
 }
 
-void ReadRope::InitSerialCommunication(std::string port,unsigned int baud_rate)
+ReadRope::Status ReadRope::InitSerialCommunication(std::string port,unsigned int baud_rate)
 {
 	try
 	{
@@ -136,7 +156,11 @@ void ReadRope::InitSerialCommunication(std::string port,unsigned int baud_rate)
 		std::cout<< "Error: " << e.what() << std::endl;
 		delete m_serial_dev_ptr;
 		m_serial_dev_ptr = nullptr;
+		
+		return ReadRope::Status::ERROR;
 	}
+	
+	return ReadRope::Status::SUCCESS;
 }
 
 
