@@ -49,6 +49,58 @@ const char *get_platform_name()
     return (PLATFORM_NAME == NULL) ? "" : PLATFORM_NAME;
 }
 
+//system refers to the state machine and functions performed by the read rope library. 
+
+
+
+uint16_t LIMIT_ZERO = 0;
+uint16_t LIMIT_ONE = 0;
+uint16_t LIMIT_TWO = 0;
+uint16_t LIMIT_THREE = 0;
+uint16_t LIMIT_FOUR = 0;
+uint16_t LIMIT_FIVE = 0;
+uint16_t LIMIT_SIX = 0;
+uint16_t LIMIT_SEVEN = 0;
+
+
+enum class State : uint8_t {
+							STATE_NULL=0, 
+							STATE_CALIBRATION_START, 
+							STATE_CALIBRATION_S0, 
+							STATE_CALIBRATION_S1, 
+							STATE_CALIBRATION_S2,
+							STATE_READ
+							};
+
+//state machine of the system
+State state_machine;
+
+//serial device communicator
+SimpleSerial* m_serial_dev_ptr;
+
+bool systemInitialized = false;
+
+void ReadRope::InitReadRopeSystem()
+{
+	state_machine = State::STATE_NULL;	
+	
+	m_serial_dev_ptr = nullptr;
+	
+	systemInitialized = true;
+}
+
+void ReadRope::CloseReadRopeSystem()
+{
+	state_machine = State::STATE_NULL;
+	
+	if(m_serial_dev_ptr)
+	{
+		delete m_serial_dev_ptr;
+	}
+	
+	m_serial_dev_ptr = nullptr;
+}
+
 std::string ReadRope::GetSerialPortOfReadRopeDevice()
 {
 	std::string platform_str(get_platform_name());
@@ -69,9 +121,11 @@ std::string ReadRope::GetSerialPortOfReadRopeDevice()
 		
 		interface_str = "/dev/ttyACM";
 		
+		int count = 0;
+		
 		while(!stopTrying)
 		{
-			int count = 0;
+			
 			
 			for(int i = 0; i < 4; i++)
 			{
@@ -146,6 +200,11 @@ std::string ReadRope::GetSerialPortOfReadRopeDevice()
 
 ReadRope::Status ReadRope::InitSerialCommunication(std::string port,unsigned int baud_rate)
 {
+	if(!systemInitialized)
+	{
+		return ReadRope::Status::ERROR_SYS_NOT_INIT;
+	}
+	
 	try
 	{
 		m_serial_dev_ptr = new SimpleSerial(port,baud_rate);
@@ -166,17 +225,17 @@ ReadRope::Status ReadRope::InitSerialCommunication(std::string port,unsigned int
 
 void ReadRope::StopReadingFromReadRope()
 {
-	state_machine = STATE_NULL;
+	state_machine = State::STATE_NULL;
 }
 
 void ReadRope::StartCalibrationProcess()
 {
-	state_machine = STATE_CALIBRATION_START;
+	state_machine = State::STATE_CALIBRATION_START;
 }
 
 void ReadRope::StartReadingFromReadRope()
 {
-	state_machine = STATE_READ;
+	state_machine = State::STATE_READ;
 }
 
 

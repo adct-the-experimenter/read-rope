@@ -75,36 +75,12 @@ private:
 #include <cstdint>
 #include <iostream>
 
-uint16_t LIMIT_ZERO = 0;
-uint16_t LIMIT_ONE = 0;
-uint16_t LIMIT_TWO = 0;
-uint16_t LIMIT_THREE = 0;
-uint16_t LIMIT_FOUR = 0;
-uint16_t LIMIT_FIVE = 0;
-uint16_t LIMIT_SIX = 0;
-uint16_t LIMIT_SEVEN = 0;
-
-#define STATE_NULL 0
-#define STATE_CALIBRATION_START 1
-#define STATE_CALIBRATION_S0 2
-#define STATE_CALIBRATION_S1 3
-#define STATE_CALIBRATION_S2 4
-#define STATE_READ 5
 
 namespace ReadRope{
 	
 	enum class Bend : uint8_t {ERROR_BEND_NO_CALIBRATION = 0, NO_BEND, BEND_S0, BEND_S1, BEND_S0_S1, BEND_S2, BEND_S0_S2, BEND_S1_S2, BEND_S0_S1_S2};
 
-	enum class Status : uint8_t {ERROR = 0, SUCCESS};
-	
-	
-//system refers to the state machine and functions performed by the read rope library. 
-
-//state machine of the system
-uint8_t state_machine = STATE_NULL;
-
-//serial device communicator
-SimpleSerial* m_serial_dev_ptr;
+	enum class Status : uint8_t {ERROR = 0, ERROR_SYS_NOT_INIT, SUCCESS};
 
 
 /*
@@ -112,6 +88,14 @@ SimpleSerial* m_serial_dev_ptr;
  * Functions *
  ************* 
 */
+
+//function to initialize the system for reading from read rope
+//Just initializes some objects that makes it easy to 
+void InitReadRopeSystem();
+
+//function to close the system
+//cleans up resources
+void CloseReadRopeSystem();
 
 //function to get the serial port that read rope device is connected to
 std::string GetSerialPortOfReadRopeDevice();
