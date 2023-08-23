@@ -1,5 +1,7 @@
 # Read Rope 
 
+## Moved to new location https://gitlab.com/pab44/read-rope 
+
 This is an open-source hardware project for a device that outputs a certain voltage depending on where the rope/wire is bent.
 
 Hackaday project: https://hackaday.io/project/166557-read-rope-electronic-nerve
